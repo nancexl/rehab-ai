@@ -36,3 +36,24 @@
 .agent-outcome.refused{border-color:var(--red);background:rgba(255,107,103,.08)}
 .agent-outcome.ok{border-color:var(--aqua)}
 .agent-outcome .final{white-space:pre-wrap;margin:6px 0}
+/* Readability + safety pass (2026-10-30, from simulated persona review) */
+.cmp{--muted:#a7b2be}
+.cmp .hint,.cmp .lede,.scenario small,.legend,.checks li,.intake,.intake select,.legform label,.evidence figcaption,.src,.plan-table,.spec-summary,.measure label,.footnote,.agent-status,.agent-trace,.agent-trace .meta,.agent-trace code,.agent-trace pre,.ir summary{font-size:.85rem}
+.scope-note{margin:10px 0 0;padding:8px 12px;border:1px solid var(--yellow);border-radius:8px;color:var(--text);font-size:.9rem;max-width:760px;background:rgba(217,237,131,.06)}
+.example-banner{margin:6px 0 8px;padding:6px 10px;border-left:3px solid var(--yellow);background:rgba(217,237,131,.08);color:var(--yellow);font-size:.85rem;border-radius:4px}
+.example-banner[hidden],.checks-head[hidden]{display:none}
+.checks-head{margin:8px 0 2px;color:var(--muted);font-size:.85rem;font-style:italic}
+.approve-note{margin:6px 0 0;color:var(--yellow);font-size:.88rem}
+.agent-boundary{margin:4px 0 10px;font-size:1rem;color:var(--text)}
+.audit-badge{display:inline-block;font-size:.8rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-right:8px;vertical-align:middle}
+.audit-badge.ok{color:#0a1013;background:var(--aqua)}
+.audit-badge.bad{color:#0a1013;background:var(--red)}
+@media(max-width:760px){.cmp-grid>*,.cmp .panel,.legform label{min-width:0}.legform{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.legform input{width:100%;min-width:0;box-sizing:border-box}.cmp-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:480px){
+  .topbar{height:auto;min-height:56px;flex-wrap:wrap;gap:4px 12px;padding:8px 15px}
+  .topbar .brand{font-size:.95rem}
+  .top-meta{gap:10px}.top-meta .quiet{font-size:.85rem}
+  .intake{grid-template-columns:1fr}
+  .scenario small{display:block;white-space:normal;overflow-wrap:anywhere}
+  .intake select{max-width:100%}
+}

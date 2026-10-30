@@ -19,6 +19,7 @@
       <p class="eyebrow">ASSISTIVE INTERFACE DESIGN · ENGINEER REVIEW</p>
       <h1>Hands-free shouldn't mean<br><em>one size fits all.</em></h1>
       <p class="lede">Start with example or engineer-entered dimensions. Compile a contact-liner pattern, review it, then cut a nonhuman fit sample. Record its closure errors and compare the next revision.</p>
+      <p class="scope-note" role="note"><b>Design demonstrator.</b> Not a medical device and not medical advice. Nonhuman fit samples only: not for wearing on a person, not load-bearing.</p>
     </section>
 
     <section class="evidence" aria-label="What people told us">
@@ -46,6 +47,7 @@
           <p class="hint">Scan knee to ankle with a phone scanning app (LiDAR or Face ID camera), export a mesh. Processed in this browser; nothing is uploaded.</p>
           <div id="scanOut" aria-live="polite"></div>
         </div>
+        <p class="example-banner" id="exampleBanner" role="status">Example values, not your measurements. Replace them before relying on any result.</p>
         <div class="legform" id="legForm"></div>
         <button class="primary" id="runBtn" type="button"><span>Plan &amp; compile</span><span>→</span></button>
       </section>
@@ -62,8 +64,12 @@
       <section class="panel" aria-labelledby="specH">
         <h2 id="specH">Device spec</h2>
         <dl class="spec-summary" id="specSummary"><dt>—</dt><dd>Compile to see the spec.</dd></dl>
+        <p class="example-banner" id="specExampleBanner" role="status">Compiled from example values.</p>
+        <p class="checks-head" id="checksHead" hidden>Compiler range checks only: fit not assessed.</p>
         <ul class="checks" id="checks"></ul>
-        <button class="primary" id="approveBtn" type="button" disabled>Approve for build</button>
+        <button class="primary" id="approveBtn" type="button" disabled>Approve v1 for nonhuman fit sample</button>
+        <p class="approve-note"><b>Not for wearing on a person. Not load-bearing.</b></p>
+        <p class="hint" id="approveHint" aria-live="polite"></p>
         <details class="ir"><summary>Device Spec IR (JSON)</summary><pre id="irJson"></pre></details>
         <div class="measure" id="measureBox" hidden>
           <h2><span class="step">5</span>Fixture fit measurements</h2>
@@ -78,7 +84,8 @@
 
     <section class="panel agent-panel" id="agentPanel" aria-labelledby="agentH">
       <h2 id="agentH"><span class="step">AI</span>Nemotron agent · Nebius Token Factory</h2>
-      <p class="hint">An NVIDIA Nemotron model chooses the compiler tools (read case → validate → compile → compare → prepare draft) and explains. Every number, check and the final outcome come from the deterministic compiler. The agent cannot approve: you do, in the Device spec panel.</p>
+      <p class="hint">An NVIDIA Nemotron model chooses the compiler tools (read case → validate → compile → compare → prepare draft) and explains. Every number, check and the final outcome come from the deterministic compiler.</p>
+      <p class="agent-boundary"><b>The agent cannot approve — you do.</b> Approval happens only in the Device spec panel.</p>
       <div class="row">
         <button class="primary" id="agentRunBtn" type="button"><span>Run Nemotron agent on these inputs</span><span>→</span></button>
         <button class="quiet" id="agentChangeBtn" type="button">Example: calf re-measured (+7/+9/+8 mm, synthetic)</button>

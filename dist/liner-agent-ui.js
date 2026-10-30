@@ -59,7 +59,9 @@
       let head = o.status === 'refused' ? `<b>Refused by the compiler.</b> No pattern compiled.` :
         o.status === 'compiled' || o.status === 'revised' ? `<b>v${o.version} compiled by code</b> · cut lengths ${o.cut_lengths_mm.join(' / ')} mm · ${o.checks_passed}/${o.checks_total} checks · human approval: <b>pending</b>` :
         `<b>Agent stopped: ${esc(o.status)}</b> (${esc(o.detail || r.stop_reason)})`;
-      $('agentOutcome').innerHTML = `<div class="agent-outcome ${o.status === 'refused' ? 'refused' : 'ok'}">${head}<div class="final">${esc(r.final_text || '')}</div>${auditHtml}` +
+      const badge = audit.ok ? '<span class="audit-badge ok" title="Every number in the explanation appears in a tool result">Claim audit ✓</span>'
+        : '<span class="audit-badge bad" title="The explanation contains numbers not found in any tool result">Claim audit ⚠</span>';
+      $('agentOutcome').innerHTML = `<div class="agent-outcome ${o.status === 'refused' ? 'refused' : 'ok'}">${badge}${head}<div class="final">${esc(r.final_text || '')}</div>${auditHtml}` +
         (r.spec ? '<div class="row"><button class="primary" id="agentApplyBtn" type="button">Load v' + o.version + ' into the compiler for my review →</button></div>' : '') + '</div>';
       if (r.spec) $('agentApplyBtn').onclick = () => { app.applyAgent(r); $('agentApplyBtn').disabled = true; $('agentApplyBtn').textContent = `v${o.version} loaded · review and approve it in the Device spec panel`; document.getElementById('preview').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
     } catch (e) {

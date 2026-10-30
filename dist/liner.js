@@ -2,7 +2,7 @@
 (() => {
   const K = window.LinerCore, $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const S = { persona: K.PERSONAS.P1, intake: null, leg: null, plan: null, spec: null, compiled: null, previous: null, calibration: null, version: 0, approved: false, review: null, measurement: null, measurementKind: 'operator_entered_unverified', options: {}, lastAgent: null };
+  const S = { persona: K.PERSONAS.P1, intake: null, leg: null, plan: null, spec: null, compiled: null, previous: null, calibration: null, version: 0, approved: false, review: null, measurement: null, measurementKind: 'operator_entered_unverified', options: {}, lastAgent: null, userActed: false };
 
   function setStage(i) { document.querySelectorAll('#stages li').forEach((li, k) => { li.classList.toggle('done', k < i); li.classList.toggle('current', k === i); }); }
 
@@ -22,7 +22,7 @@
   function renderPersonas() {
     $('personas').innerHTML = Object.values(K.PERSONAS).map(p =>
       `<button class="scenario" role="radio" type="button" data-id="${p.id}" aria-checked="${p.id === S.persona.id}"><b>${p.id} · ${esc(p.title)}</b><small>${esc(p.note)}</small></button>`).join('');
-    $('personas').querySelectorAll('.scenario').forEach(b => b.onclick = () => { loadPersona(K.PERSONAS[b.dataset.id]); run(); });
+    $('personas').querySelectorAll('.scenario').forEach(b => b.onclick = () => { S.userActed = true; loadPersona(K.PERSONAS[b.dataset.id]); run(); });
   }
   function loadPersona(p) {
     S.persona = p; S.intake = { ...p.intake }; S.leg = { ...p.leg }; S.calibration = null; S.previous = null; S.version = 0; S.measurement = null; S.review = null; S.approved = false;
@@ -40,6 +40,7 @@
     S.measurement = null; S.review = null; S.options = {};
     $('approveBtn').disabled = $('downloadBtn').disabled = $('printBtn').disabled = $('recordBtn').disabled = true;
     $('versionTag').textContent = 'Inputs changed · compile again';
+    S.userActed = false; updateApproveUi();
     $('measureBox').hidden = true; $('learnOut').innerHTML = '';
   }
 
@@ -64,16 +65,27 @@
       S.compiled = null; $('preview').innerHTML = '<p class="empty">Compilation stopped: the plan does not recommend a hands-free device for this person.</p>';
       $('specSummary').innerHTML = '<dt>Status</dt><dd>blocked by plan</dd>'; $('checks').innerHTML = ''; $('irJson').textContent = '';
       $('approveBtn').disabled = $('downloadBtn').disabled = $('printBtn').disabled = true; $('versionTag').textContent = '';
+      $('approveBtn').textContent = 'Nothing to approve'; updateApproveUi(); $('approveHint').textContent = 'The plan stopped this intake, so no pattern was compiled.';
       return;
     }
     S.spec = K.makeLinerSpec({ persona: { ...S.persona, intake: S.intake }, leg: S.leg, calibration: S.calibration, options: S.options });
     S.compiled = K.compileLiner(S.spec); S.version = S.version || 1;
     renderSpec(); renderPreview();
-    $('approveBtn').disabled = !S.compiled.ok; $('approveBtn').textContent = 'Approve for build';
+    $('approveBtn').textContent = `Approve v${S.version} for nonhuman fit sample`; updateApproveUi();
     $('downloadBtn').disabled = $('printBtn').disabled = true;
     setStage(S.compiled.ok ? 2 : 1);
   }
-  $('runBtn').onclick = run;
+  $('runBtn').onclick = () => { S.userActed = true; run(); };
+
+  // Approval needs an explicit user action (Plan & compile, a profile pick, a scan import, or loading an agent result),
+  // so the auto-compiled example on page load can be previewed but not approved.
+  function updateApproveUi() {
+    const ok = !!(S.compiled && S.compiled.ok), example = (S.leg && S.leg.source) === 'example_values';
+    if (!S.approved) $('approveBtn').disabled = !(ok && S.userActed);
+    $('approveHint').textContent = S.approved ? '' : !ok ? (S.compiled ? 'Fix the failed checks before approval.' : 'Inputs changed. Press Plan & compile, then review.')
+      : !S.userActed ? 'Preview only. Press Plan & compile (or pick a profile) to review, then approve.' : 'Review the pattern and checks, then approve.';
+    $('exampleBanner').hidden = !example; $('specExampleBanner').hidden = !(example && ok);
+  }
 
   function renderSpec() {
     const sp = S.spec, c = S.compiled;
@@ -83,7 +95,8 @@
       ['Cut lengths', `${c.cut_lengths_mm.join(' / ')} mm`], ['Crest relief', `${sp.liner.crest_channel_mm} mm channel`],
       ['Calibration', sp.calibration.source === 'default' ? 'none yet (v1)' : `${sp.calibration.length_add_mm.join(' / ')} mm`]];
     $('specSummary').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
-    $('checks').innerHTML = c.checks.map(x => `<li class="${x.ok ? 'ok' : 'bad'}"><b>${x.ok ? '✓' : '✗'}</b>${esc(x.id.replace(/_/g, ' '))}: ${esc(x.detail)}</li>`).join('');
+    $('checks').innerHTML = c.checks.map(x => `<li class="${x.ok ? 'ok' : 'bad'}"><b>${x.ok ? '✓' : '✗'}</b>${esc(x.id.replace(/_in_range$/, x.ok ? ' within compiler range (fit not assessed)' : ' outside compiler range').replace(/_/g, ' '))}: ${esc(x.detail)}</li>`).join('');
+    $('checksHead').hidden = !c.checks.length;
     $('irJson').textContent = JSON.stringify(sp, null, 2);
     $('versionTag').textContent = `v${S.version}${c.ok ? '' : ' · blocked'}`;
   }
@@ -108,7 +121,7 @@
   }
 
   // ---------- build ----------
-  $('approveBtn').onclick = () => { if (!S.compiled?.ok) return; S.approved = true; S.review = { decision: 'approved_for_nonhuman_specimen', timestamp: new Date().toISOString() }; $('downloadBtn').disabled = $('printBtn').disabled = $('recordBtn').disabled = false; $('approveBtn').textContent = `Approved v${S.version} ✓`; $('approveBtn').disabled = true; $('measureBox').hidden = false; setStage(3); };
+  $('approveBtn').onclick = () => { if (!S.compiled?.ok) return; S.approved = true; S.review = { decision: 'approved_for_nonhuman_specimen', timestamp: new Date().toISOString() }; $('downloadBtn').disabled = $('printBtn').disabled = $('recordBtn').disabled = false; $('approveBtn').textContent = `Approved v${S.version} ✓`; $('approveBtn').disabled = true; $('approveHint').textContent = ''; $('measureBox').hidden = false; setStage(3); };
   const pages = () => ['liner', 'crest'].flatMap(layer => K.linerPages(S.compiled, { title: `Rehab AI liner · ${S.persona.id} · v${S.version}`, layer }));
   $('downloadBtn').onclick = () => { if (!S.approved || !S.compiled?.ok) return; pages().forEach((svg, i) => {
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
@@ -157,7 +170,7 @@
       S.leg.source = 'phone_scan';
       $('legForm').querySelectorAll('input').forEach(el => { el.value = S.leg[el.dataset.k]; });
       $('legSource').textContent = 'from phone scan · check shin length & knee width';
-      resetVersions(); run();
+      resetVersions(); S.userActed = true; run();
     } catch (err) { $('scanOut').innerHTML = `<p class="refusal">${esc(err.message)}</p>`; }
   };
   function profileSvg(r) {
@@ -182,7 +195,7 @@
       $('legForm').querySelectorAll('input').forEach(el => { el.value = S.leg[el.dataset.k]; });
       $('legSource').textContent = (S.leg.source || 'entered') + ' · via Nemotron agent';
       S.options = { height_mm: sp.liner.height_mm, foam_thickness_mm: sp.liner.foam_thickness_mm, overlap_mm: sp.liner.overlap_mm };
-      S.calibration = null; S.measurement = null; S.review = null; S.approved = false;
+      S.calibration = null; S.measurement = null; S.review = null; S.approved = false; S.userActed = true;
       S.version = result.outcome.version || 1; S.previous = result.input.baseline ? prev : null;
       run();
       S.lastAgent = { version: S.version, leg: { ...S.leg }, options: { ...S.options } };
