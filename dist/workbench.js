@@ -10,7 +10,7 @@
   const W = {
     case1: {
       name: 'Scenario A · Ankle fracture · iWALK calf liner', id: 'case1-liner',
-      track: [['done', 'Sample leg scan (synthetic OBJ), 5/5 quality checks'], ['done', 'Girths 325.7 / 364.7 / 327.4 mm (code)'], ['next', 'Patient video of using the iWALK: not built'], ['next', 'No physics on this part; Newton ran on the test piece only'], ['done', 'Live Nemotron draft v1 (30 Oct 2026, 14:08 GMT)'], ['done', '10/10 geometry checks pass'], ['wait', 'Awaiting clinician approval'], ['wait', 'Locked until approval'], ['done', 'Re-scan → v2 drafted (−13 / −14.6 / −13.1 mm)']],
+      track: [['done', 'Sample leg scan (synthetic OBJ), 5/5 quality checks'], ['done', 'Girths 325.7 / 364.7 / 327.4 mm (code)'], ['next', 'Patient video of using the iWALK: not built'], ['next', 'No physics on this part; Newton ran on the test piece only'], ['done', 'Live Nemotron draft v1 (30 Oct 2026, 14:08 GMT)'], ['done', 'Compiler: 10/10 geometry checks pass · review list: 6 passed, 1 note, 1 out-of-range scan refused'], ['wait', 'Awaiting clinician approval'], ['wait', 'Locked until approval'], ['done', 'Re-scan → v2 drafted (−13 / −14.6 / −13.1 mm)']],
       tests: [
         ['pass', 'Scan quality', '5/5', 'code'],
         ['pass', 'Girth top / mid / bottom in range', '325.7 / 364.7 / 327.4 mm', 'code'],
@@ -79,7 +79,7 @@
     <dt>Approver</dt><dd>— not approved yet</dd>
     <dt>Approval time</dt><dd>—</dd></dl>
     <p class="wb-lock">🔒 Files unlock only after a clinician approves this exact version. Any edit revokes approval. Liner and insole are cut-ready (SVG); only the test piece is an STL.</p></div>`;
-  const PART = { case1: ['./parts/case1.svg', 'Liner cut pattern, tile 1 of 5 (generated 1:1 SVG)'], case2: ['./parts/case2.svg', 'Insole relief layer (generated 1:1 SVG)'] };
+  const PART = { case1: [[1, 2, 3, 4, 5].map(i => `./parts/case1-p${i}.svg`), 'Liner cut pattern: 4 liner tiles + crest relief pad, all 5 pages (generated 1:1 SVG)'], case2: ['./parts/case2.svg', 'Insole relief layer (generated 1:1 SVG)'] };
   function status(c, id) {
     const n = k => c.tests.filter(t => t[0] === k).length, pass = n('pass'), warn = n('warn'), fail = n('fail');
     // Honest summary: a fail row here is the out-of-range guardrail refusing a bad scan, shown as such.
@@ -93,7 +93,7 @@
     document.querySelectorAll('.wb-views button').forEach(b => b.setAttribute('aria-selected', b.dataset.v === view));
     $('#wbTrack').innerHTML = TRACK.map((s, k) => `<li class="s-${c.track[k][0]}"><span class="ic">${TI[c.track[k][0]]}</span><b>${esc(s)}${c.track[k][0] === 'next' ? ' <em>next</em>' : ''}</b><small>${esc(c.track[k][1])}</small></li>`).join('');
     const [st, head, sub] = status(c, id), part = PART[id];
-    const vis = part ? `<figure class="wb-part"><img src="${part[0]}" alt="${esc(part[1])}" loading="lazy"><figcaption>${esc(part[1])}</figcaption></figure>`
+    const vis = part ? `<figure class="wb-part">${[].concat(part[0]).map((src, k, a) => `<img src="${src}" alt="${esc(part[1])}${a.length > 1 ? `, page ${k + 1} of ${a.length}` : ''}" loading="lazy">`).join('')}<figcaption>${esc(part[1])}</figcaption></figure>`
       : `<figure class="wb-part wb-part-ph"><span>NVIDIA Newton test piece · STL</span><figcaption>Nonhuman test piece, recorded 14 Oct 2026</figcaption></figure>`;
     const sim = id === 'case2' ? `<figure class="wb-sim"><img src="./sim/newton-insole-heatmap.png" alt="Top-surface compression, flat insole vs insole with relief window" loading="lazy"><figcaption>NVIDIA Newton 1.6.1 XPBD (CPU), simplified: relative flat-vs-relief comparison; assumed, scaled EVA stiffness; not a validated plantar-pressure simulation.</figcaption></figure>` : '';
     const hero = `<div class="wb-hero">${vis}<div class="wb-status s-${st}"><span class="wb-big">${st === 'ok' ? '✓' : '✓'}</span><div><b>${esc(head)}</b><small>${esc(sub)}</small><small class="wb-gate-s">${esc(c.track[6][1])}</small></div></div></div>`;

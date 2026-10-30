@@ -118,3 +118,4 @@ section{padding:110px 0}
 .wb-sim img{width:100%;display:block}.wb-sim figcaption{color:#3d4850;font-size:.85rem;line-height:1.45}
 @media (min-width:901px){.hero3d{left:32%}}
 @media (max-width:900px){.wb-sim{grid-template-columns:1fr}}
+.wb-part:has(img+img){display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}.wb-part:has(img+img) figcaption{grid-column:1/-1}
