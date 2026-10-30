@@ -20,7 +20,11 @@
     document.body.appendChild(root);
     body = root.querySelector('.dm-body'); bar = root.querySelector('.dm-bar i'); chapEl = [...root.querySelectorAll('.dm-chap li')];
     root.addEventListener('click', e => { const a = e.target.closest('[data-a]'); if (!a) return; ({ skip, replay: start, close })[a.dataset.a](); });
-    addEventListener('keydown', e => { if (root.hidden) return; if (e.key === 'Escape') close(); else if (e.key === 'ArrowRight') skip(); else if (e.key === 'r' || e.key === 'R') start(); });
+    addEventListener('keydown', e => {
+      if (root.hidden) return;
+      if (e.key === 'Tab') { const f = [...root.querySelectorAll('button:not([disabled]),a[href]')]; if (!f.length) return; const i = f.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); } return; }
+      if (e.key === 'Escape') close(); else if (e.key === 'ArrowRight') skip(); else if (e.key === 'r' || e.key === 'R') start(); });
   }
   const later = (fn, ms) => timers.push(setTimeout(fn, reduce ? 0 : ms / SP));
   function clear() { timers.forEach(clearTimeout); timers = []; }
