@@ -23,3 +23,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## MyoLeg anatomy reference
+
+dist/samples/insole-anatomy-reference.png is a rendered, transformed illustration incorporating right-foot bone geometry from MyoHub/myo_sim (MyoLeg), licensed under Apache License 2.0. Source: https://github.com/MyoHub/myo_sim. The original model has been transformed and rendered with an illustrative insole. See APACHE-2.0.txt for the license; no patient scan is represented.

@@ -142,7 +142,7 @@ if (studio && window.LinerCore && window.CompilerCore) {
     S.ctl.target.set(0, sc === 'A' ? 220 : 20, 0);
   }
   S.ticks.push(() => { const g = grp.children[0]; if (!g || !target) return; const k = Math.min(1, (performance.now() - t0) / 350); g.scale.setScalar(target * (0.985 + 0.015 * k)); });
-  studio.querySelector('.st-pick').addEventListener('click', e => { const b = e.target.closest('button[data-s]'); if (!b) return; sc = b.dataset.s; vals = {}; ui(); rebuild();
+  studio.querySelector('.st-pick').addEventListener('click', e => { const b = e.target.closest('button[data-s]'); if (!b) return; sc = b.dataset.s; const ref = document.getElementById('anatomyReference'); if (ref) ref.hidden = sc !== 'B'; vals = {}; ui(); rebuild();
     S.cam.position.set(...(sc === 'A' ? [520, 420, 760] : [380, 520, 520])); document.dispatchEvent(new CustomEvent('studio:case', { detail: sc })); });
   let raf = 0; form.addEventListener('input', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(rebuild); });
   ui(); scanP.then(rebuild).catch(() => { out.textContent = 'Sample scan could not load (open from a web server).'; });

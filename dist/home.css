@@ -134,3 +134,7 @@ section{padding:72px 0}
 .wb-hand dl{display:grid;grid-template-columns:160px 1fr;gap:6px 12px;margin:0 0 12px;font-size:.9rem}.wb-hand dt{color:var(--muted)}.wb-hand dd{margin:0;overflow-wrap:anywhere}
 .wb-lock,.wb-task,.wb-gate{background:#fdf6ea;border:1px solid #f0dcb4;border-radius:10px;padding:10px 12px;font-size:.88rem}
 @media (max-width:860px){.wb-grid{grid-template-columns:1fr}.wb-hand dl{grid-template-columns:1fr}.wb-tests{font-size:.8rem}}
+.anatomy-reference { margin: 24px 0 0; max-width: 720px; }
+.anatomy-reference[hidden] { display: none; }
+.anatomy-reference img { display: block; width: 100%; border-radius: 12px; }
+.anatomy-reference figcaption { margin-top: 8px; color: #52616b; font-size: .85rem; line-height: 1.45; }
