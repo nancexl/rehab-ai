@@ -1,0 +1,19 @@
+# Render Blueprint (free web service). Founder: Render dashboard → New → Blueprint → pick the GitHub repo.
+# The key is entered in the dashboard (sync: false) and never committed.
+services:
+  - type: web
+    name: rehab-ai-liner
+    runtime: node
+    plan: free
+    buildCommand: "true"
+    startCommand: node app-server.mjs --host 0.0.0.0
+    healthCheckPath: /api/liner/status
+    envVars:
+      - key: NEBIUS_TOKEN_FACTORY_KEY
+        sync: false
+      - key: NEBIUS_MODEL
+        value: nvidia/nemotron-3-super-120b-a12b
+      - key: AGENT_RATE_MAX
+        value: "8"
+      - key: AGENT_TOKEN_BUDGET
+        value: "600000"

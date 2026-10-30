@@ -1,0 +1,36 @@
+{
+  "case_label": "Case B · changed calf measurements → v2 (synthetic)",
+  "intake": {
+    "side": "right",
+    "weight_bearing": "non_weight_bearing",
+    "age_band": "18-49",
+    "shower": "tub",
+    "work": "desk",
+    "balance_concern": false,
+    "knee_problem": false,
+    "lives_alone": true,
+    "stairs_at_home": true,
+    "outdoor_commute": true
+  },
+  "leg": {
+    "circ_top_mm": 352,
+    "circ_mid_mm": 371,
+    "circ_bottom_mm": 338,
+    "shin_length_mm": 380,
+    "knee_width_mm": 98,
+    "source": "synthetic"
+  },
+  "baseline": {
+    "version": 1,
+    "leg": {
+      "circ_top_mm": 345,
+      "circ_mid_mm": 362,
+      "circ_bottom_mm": 330,
+      "shin_length_mm": 380,
+      "knee_width_mm": 98,
+      "source": "example_values"
+    },
+    "options": {}
+  },
+  "instruction": "Calf circumferences were re-taken (synthetic example values). Produce v2 and say what changed."
+}

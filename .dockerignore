@@ -1,0 +1,8 @@
+.git
+output
+evidence
+render
+handoff
+simulation
+*.xlsx
+.env*

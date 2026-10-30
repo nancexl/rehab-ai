@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rehab AI | Contact Liner Compiler</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./compiler.css" />
+  <link rel="stylesheet" href="./liner.css" />
+</head>
+<body class="cmp">
+  <header class="topbar">
+    <a class="brand" href="./liner.html"><span class="brandmark" aria-hidden="true"><i></i><i></i></span><span>Rehab AI · Hardware Compiler</span></a>
+    <div class="top-meta"><span class="mode" id="modeTag"><b></b> local geometry · checking Nemotron…</span></div>
+  </header>
+
+  <main class="shell">
+    <section class="cmp-hero">
+      <p class="eyebrow">ASSISTIVE INTERFACE DESIGN · ENGINEER REVIEW</p>
+      <h1>Hands-free shouldn't mean<br><em>one size fits all.</em></h1>
+      <p class="lede">Start with example or engineer-entered dimensions. Compile a contact-liner pattern, review it, then cut a nonhuman fit sample. Record its closure errors and compare the next revision.</p>
+    </section>
+
+    <section class="evidence" aria-label="What people told us">
+      <figure><blockquote>Loss of independence and basic household tasks dominate the experience.</blockquote><figcaption>Living alone with a non-weight-bearing injury · r/LivingAlone</figcaption></figure>
+      <figure><blockquote>Crutches and scooters cause secondary pain: hands, wrists, shoulders, the good leg.</blockquote><figcaption>r/brokenbones</figcaption></figure>
+      <figure><blockquote>Hands-free restores normality for some; balance, straps and donning make it fail for others.</blockquote><figcaption>iWalk reviews · r/ORIF</figcaption></figure>
+      <figure><blockquote>People switch between crutches, scooter and hands-free devices by task.</blockquote><figcaption>r/ORIF</figcaption></figure>
+      <p class="hint">Paraphrased themes from public posts; anecdotal signals, not a representative study.</p>
+    </section>
+
+    <ol class="stages" id="stages" aria-label="Compiler stages">
+      <li><span>1</span>Intake</li><li><span>2</span>Plan</li><li><span>3</span>Compile</li><li><span>4</span>Build</li><li><span>5</span>Measure</li><li><span>6</span>Learn</li>
+    </ol>
+
+    <div class="cmp-grid">
+      <section class="panel" aria-labelledby="inH">
+        <h2 id="inH"><span class="step">1</span>Intake</h2>
+        <div class="scenarios" id="personas" role="radiogroup" aria-label="Person"></div>
+        <h3>How you live</h3>
+        <div class="intake" id="intake"></div>
+        <h3>Leg measurements <small class="src" id="legSource"></small></h3>
+        <p class="hint">Tape measure around the calf: just below the knee, 75 mm lower, 150 mm lower. Shin length: knee crease to ankle bone.</p>
+        <div class="scanbox">
+          <label class="export file-btn">Or import a phone scan (OBJ / PLY / STL)<input id="scanFile" type="file" accept=".obj,.ply,.stl" hidden></label>
+          <p class="hint">Scan knee to ankle with a phone scanning app (LiDAR or Face ID camera), export a mesh. Processed in this browser; nothing is uploaded.</p>
+          <div id="scanOut" aria-live="polite"></div>
+        </div>
+        <div class="legform" id="legForm"></div>
+        <button class="primary" id="runBtn" type="button"><span>Plan &amp; compile</span><span>→</span></button>
+      </section>
+
+      <section class="panel" aria-labelledby="planH">
+        <h2 id="planH"><span class="step">2</span>Engineering scope review</h2>
+        <div id="plan"><p class="empty">Choose a person and press Plan &amp; compile.</p></div>
+        <h2 class="mt"><span class="step">3</span>Liner pattern <small id="versionTag"></small></h2>
+        <div class="preview liner-preview" id="preview"><p class="empty">No liner compiled yet.</p></div>
+        <div class="legend"><span class="lg base"></span>liner (flat, front of shin in the middle) <span class="lg relief"></span>tibial-crest relief <span class="lg flange"></span>strap slots <span class="lg ghost"></span>previous version</div>
+        <div class="row"><button class="export" id="downloadBtn" type="button" disabled>Download 1:1 templates</button><button class="export" id="printBtn" type="button" disabled>Print templates</button><button class="export" id="recordBtn" type="button" disabled>Export reviewed build record</button></div>
+      </section>
+
+      <section class="panel" aria-labelledby="specH">
+        <h2 id="specH">Device spec</h2>
+        <dl class="spec-summary" id="specSummary"><dt>—</dt><dd>Compile to see the spec.</dd></dl>
+        <ul class="checks" id="checks"></ul>
+        <button class="primary" id="approveBtn" type="button" disabled>Approve for build</button>
+        <details class="ir"><summary>Device Spec IR (JSON)</summary><pre id="irJson"></pre></details>
+        <div class="measure" id="measureBox" hidden>
+          <h2><span class="step">5</span>Fixture fit measurements</h2>
+          <p class="hint">Use a nonhuman fixture with the declared circumferences. Record the cut sample's closure overlap at each height, and use a negative number for a gap. Example values are not measurements.</p>
+          <label>Printed 100 mm ruler measures <input id="mRuler" type="number" step="0.5"> mm</label>
+          <label>Overlap at top <input id="mTop" type="number" step="0.5"> mm · middle <input id="mMid" type="number" step="0.5"> mm · bottom <input id="mBot" type="number" step="0.5"> mm</label>
+          <div class="row"><button class="primary" id="learnBtn" type="button">Learn → compile v2</button><button class="quiet" id="exampleBtn" type="button">Example values (not real)</button></div>
+          <div class="learn" id="learnOut" aria-live="polite"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel agent-panel" id="agentPanel" aria-labelledby="agentH">
+      <h2 id="agentH"><span class="step">AI</span>Nemotron agent · Nebius Token Factory</h2>
+      <p class="hint">An NVIDIA Nemotron model chooses the compiler tools (read case → validate → compile → compare → prepare draft) and explains. Every number, check and the final outcome come from the deterministic compiler. The agent cannot approve: you do, in the Device spec panel.</p>
+      <div class="row">
+        <button class="primary" id="agentRunBtn" type="button"><span>Run Nemotron agent on these inputs</span><span>→</span></button>
+        <button class="quiet" id="agentChangeBtn" type="button">Example: calf re-measured (+7/+9/+8 mm, synthetic)</button>
+        <button class="quiet" id="agentInvalidBtn" type="button">Example: invalid input (synthetic)</button>
+      </div>
+      <p class="agent-status" id="agentStatus" aria-live="polite"></p>
+      <ol class="agent-trace" id="agentTrace"></ol>
+      <div id="agentOutcome"></div>
+    </section>
+
+    <p class="footnote">Design demonstrator. The liner is a contact/comfort layer for an existing hands-free crutch; the load path stays the commercial device's. Not a medical device and not medical advice. Clinicians decide weight-bearing and aid choice.</p>
+  </main>
+  <script src="./liner-core.js"></script>
+  <script src="./liner-record.js"></script>
+  <script src="./scan-core.js"></script>
+  <script src="./liner.js"></script>
+  <script src="./liner-agent-ui.js"></script>
+</body>
+</html>

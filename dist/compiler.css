@@ -1,0 +1,54 @@
+.cmp .cmp-hero{padding:48px 0 22px}
+.cmp .cmp-hero h1{font-size:clamp(2.2rem,4.2vw,4.4rem);line-height:.95;letter-spacing:-.03em;margin:0 0 16px}
+.cmp .cmp-hero h1 em{color:var(--aqua);font-style:normal}
+.cmp .lede{color:var(--muted);max-width:760px}
+.stages{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;list-style:none;padding:0;margin:0 0 18px}
+.stages li{border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--muted);font-size:.86rem;background:var(--panel)}
+.stages li span{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);margin-right:8px;font-size:.72rem}
+.stages li.done{color:var(--text);border-color:var(--aqua2)}
+.stages li.done span{background:var(--aqua2);border-color:var(--aqua2);color:#071010}
+.stages li.current{color:var(--text);border-color:var(--aqua);box-shadow:0 0 0 1px var(--aqua) inset}
+.cmp-grid{display:grid;grid-template-columns:minmax(280px,.9fr) minmax(360px,1.3fr) minmax(300px,1fr);gap:14px;align-items:start}
+.cmp .panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:18px}
+.cmp h2{font-size:1.05rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.cmp h2 small{color:var(--aqua);font-size:.8rem;font-weight:600}
+.cmp h3{font-size:.9rem;margin:18px 0 8px}
+.cmp .step{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);font-size:.75rem;color:var(--aqua)}
+.cmp .hint{color:var(--muted);font-size:.8rem;margin:4px 0 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.file-btn{cursor:pointer}
+.scenarios{display:grid;gap:8px}
+.scenario{display:block;text-align:left;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel2);cursor:pointer;color:var(--text)}
+.scenario b{display:block;font-size:.9rem}
+.scenario small{color:var(--muted);font-size:.76rem}
+.scenario[aria-checked="true"]{border-color:var(--aqua);box-shadow:0 0 0 1px var(--aqua) inset}
+.tracing canvas{width:100%;border-radius:8px;background:#111;cursor:crosshair;display:block}
+.tracing-step{color:var(--aqua);font-size:.85rem;margin:8px 0 0}
+.foot-summary{font-size:.82rem;color:var(--muted);margin:10px 0}
+.preview{background:#0c1116;border:1px solid var(--line);border-radius:10px;min-height:420px;display:grid;place-items:center;padding:10px}
+.preview svg{width:100%;max-height:560px}
+.preview .empty{color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.75rem;color:var(--muted);margin:8px 0}
+.lg{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-2px}
+.lg.base{background:#2c3b45;border:1px solid var(--aqua)}.lg.relief{background:#ff7849}.lg.flange{background:#d9ed83}.lg.ghost{border:1px dashed #b4c1c9}
+.spec-summary{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.84rem;margin:0 0 10px}
+.spec-summary dt{color:var(--muted)}.spec-summary dd{margin:0}
+.checks{list-style:none;padding:0;margin:0 0 12px;font-size:.8rem}
+.checks li{padding:3px 0;color:var(--muted)}
+.checks li b{display:inline-block;width:18px}
+.checks li.ok b{color:var(--aqua)}.checks li.bad b{color:var(--red)}.checks li.bad{color:var(--text)}
+.ir pre{max-height:220px;overflow:auto;font-size:.7rem;background:#0c1116;padding:10px;border-radius:8px}
+.measure{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+.measure label{display:block;font-size:.82rem;color:var(--muted);margin:6px 0}
+.measure input{width:72px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+.learn{font-size:.82rem;margin-top:10px}
+.learn table{width:100%;border-collapse:collapse;margin-top:6px}
+.learn td,.learn th{border-bottom:1px solid var(--line);padding:4px;text-align:left}
+.compare{margin-top:14px}
+.cmp-compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cmp-compare-card{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.cmp-compare-card svg{width:100%;height:300px}
+.cmp-compare-card b{font-size:.86rem}.cmp-compare-card p{font-size:.76rem;color:var(--muted);margin:4px 0 0}
+.footnote{color:var(--muted);font-size:.75rem;text-align:center;margin:18px 0 40px}
+@media(max-width:1100px){.cmp-grid{grid-template-columns:1fr}.cmp-compare-grid{grid-template-columns:1fr}.stages{grid-template-columns:repeat(3,1fr)}}
+.cmp button:disabled,.cmp .primary:disabled{opacity:.38;cursor:not-allowed;filter:grayscale(.6)}

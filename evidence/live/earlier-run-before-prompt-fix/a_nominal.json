@@ -1,0 +1,359 @@
+{
+  "schema": "rehab-liner-agent-trace/0.1",
+  "timestamp": "2026-10-30T09:50:27.882Z",
+  "provider": "Nebius Token Factory",
+  "base_url": "https://api.tokenfactory.nebius.com/v1",
+  "model_requested": "nvidia/nemotron-3-super-120b-a12b",
+  "model_used": "nvidia/nemotron-3-super-120b-a12b",
+  "model_returned": "nvidia/nemotron-3-super-120b-a12b",
+  "fell_back": false,
+  "case_label": "Case A · nominal example values (P1)",
+  "input": {
+    "intake": {
+      "side": "right",
+      "weight_bearing": "non_weight_bearing",
+      "age_band": "18-49",
+      "shower": "tub",
+      "work": "desk",
+      "balance_concern": false,
+      "knee_problem": false,
+      "lives_alone": true,
+      "stairs_at_home": true,
+      "outdoor_commute": true
+    },
+    "leg": {
+      "circ_top_mm": 345,
+      "circ_mid_mm": 362,
+      "circ_bottom_mm": 330,
+      "shin_length_mm": 380,
+      "knee_width_mm": 98,
+      "source": "example_values"
+    },
+    "baseline": null,
+    "instruction": null
+  },
+  "trace": [
+    {
+      "step": 1,
+      "type": "model",
+      "turn": 1,
+      "model_requested": "nvidia/nemotron-3-super-120b-a12b",
+      "model_returned": "nvidia/nemotron-3-super-120b-a12b",
+      "latency_ms": 1023,
+      "usage": {
+        "prompt_tokens": 1035,
+        "completion_tokens": 24,
+        "total_tokens": 1059
+      },
+      "finish_reason": "tool_calls",
+      "tool_calls": [
+        {
+          "name": "read_case",
+          "arguments": "{}"
+        }
+      ],
+      "text": null
+    },
+    {
+      "step": 2,
+      "type": "tool",
+      "name": "read_case",
+      "arguments": {},
+      "result": {
+        "case_label": "Case A · nominal example values (P1)",
+        "intake": {
+          "side": "right",
+          "weight_bearing": "non_weight_bearing",
+          "age_band": "18-49",
+          "shower": "tub",
+          "work": "desk",
+          "balance_concern": false,
+          "knee_problem": false,
+          "lives_alone": true,
+          "stairs_at_home": true,
+          "outdoor_commute": true
+        },
+        "leg": {
+          "circ_top_mm": 345,
+          "circ_mid_mm": 362,
+          "circ_bottom_mm": 330,
+          "shin_length_mm": 380,
+          "knee_width_mm": 98,
+          "source": "example_values"
+        },
+        "measurement_provenance": "example_values",
+        "operator_instruction": null,
+        "baseline": null,
+        "next_version": 1,
+        "option_bounds": {
+          "height_mm": [
+            100,
+            200
+          ],
+          "foam_thickness_mm": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "overlap_mm": [
+            20,
+            50
+          ]
+        },
+        "scope": "Nonhuman fit-specimen contact liner for a commercial hands-free knee crutch. Not load-bearing. Not for patient use."
+      },
+      "ms": 1,
+      "authority": "deterministic liner-core.js"
+    },
+    {
+      "step": 3,
+      "type": "model",
+      "turn": 2,
+      "model_requested": "nvidia/nemotron-3-super-120b-a12b",
+      "model_returned": "nvidia/nemotron-3-super-120b-a12b",
+      "latency_ms": 2109,
+      "usage": {
+        "prompt_tokens": 1299,
+        "completion_tokens": 24,
+        "total_tokens": 1323
+      },
+      "finish_reason": "tool_calls",
+      "tool_calls": [
+        {
+          "name": "validate_measurements",
+          "arguments": "{}"
+        }
+      ],
+      "text": null
+    },
+    {
+      "step": 4,
+      "type": "tool",
+      "name": "validate_measurements",
+      "arguments": {},
+      "result": {
+        "ok": true,
+        "measurement_failures": [],
+        "scope_refusal_reasons": []
+      },
+      "ms": 1,
+      "authority": "deterministic liner-core.js"
+    },
+    {
+      "step": 5,
+      "type": "model",
+      "turn": 3,
+      "model_requested": "nvidia/nemotron-3-super-120b-a12b",
+      "model_returned": "nvidia/nemotron-3-super-120b-a12b",
+      "latency_ms": 1481,
+      "usage": {
+        "prompt_tokens": 1352,
+        "completion_tokens": 178,
+        "total_tokens": 1530
+      },
+      "finish_reason": "tool_calls",
+      "tool_calls": [
+        {
+          "name": "compile_pattern",
+          "arguments": "{\"height_mm\": 150, \"foam_thickness_mm\": 4, \"overlap_mm\": 30}"
+        }
+      ],
+      "text": null
+    },
+    {
+      "step": 6,
+      "type": "tool",
+      "name": "compile_pattern",
+      "arguments": {
+        "height_mm": 150,
+        "foam_thickness_mm": 4,
+        "overlap_mm": 30
+      },
+      "result": {
+        "version": 1,
+        "ok": true,
+        "height_mm": 150.2,
+        "cut_lengths_mm": [
+          387.6,
+          404.6,
+          372.6
+        ],
+        "pattern_width_mm": 403.6,
+        "overlap_mm": 30,
+        "failed_checks": [],
+        "checks_passed": 10,
+        "checks_total": 10,
+        "options": {
+          "height_mm": 150,
+          "foam_thickness_mm": 4,
+          "overlap_mm": 30
+        },
+        "spec_sha256": "9f352dd473eb9d9dfcbe9f802fd7fc85e559d2361c96726514d656ad5005678c"
+      },
+      "ms": 1,
+      "authority": "deterministic liner-core.js"
+    },
+    {
+      "step": 7,
+      "type": "model",
+      "turn": 4,
+      "model_requested": "nvidia/nemotron-3-super-120b-a12b",
+      "model_returned": "nvidia/nemotron-3-super-120b-a12b",
+      "latency_ms": 895,
+      "usage": {
+        "prompt_tokens": 1593,
+        "completion_tokens": 33,
+        "total_tokens": 1626
+      },
+      "finish_reason": "tool_calls",
+      "tool_calls": [
+        {
+          "name": "prepare_build_record",
+          "arguments": "{}"
+        }
+      ],
+      "text": null
+    },
+    {
+      "step": 8,
+      "type": "tool",
+      "name": "prepare_build_record",
+      "arguments": {},
+      "result": {
+        "status": "awaiting_human_approval",
+        "version": 1,
+        "spec_sha256": "9f352dd473eb9d9dfcbe9f802fd7fc85e559d2361c96726514d656ad5005678c",
+        "template_pages": 5,
+        "template_scale": "1:1 mm, A4 landscape tiles with 100 mm ruler",
+        "approval_required": "An operator must approve this exact version in the browser; editing or recompiling revokes approval."
+      },
+      "ms": 1,
+      "authority": "deterministic liner-core.js"
+    },
+    {
+      "step": 9,
+      "type": "model",
+      "turn": 5,
+      "model_requested": "nvidia/nemotron-3-super-120b-a12b",
+      "model_returned": "nvidia/nemotron-3-super-120b-a12b",
+      "latency_ms": 1598,
+      "usage": {
+        "prompt_tokens": 1752,
+        "completion_tokens": 263,
+        "total_tokens": 2015
+      },
+      "finish_reason": "stop",
+      "tool_calls": [],
+      "text": "The case “Case A·nominal example values (P1)” passed measurement validation. Using default options (liner height 150 mm, foam thickness 4 mm, overlap 30 mm), the compiler produced version 1 of the contact‑liner pattern. Cut lengths are 387.6 mm (top), 404.6 mm (middle), and 372.6 mm (bottom); pattern width is 403.6 mm. All ten engineering checks passed. No baseline exists for comparison. The build record is ready, awaiting human approval in the browser; the spec SHA‑256 is 9f352dd473eb9d9dfcbe9f802fd7fc85e559d2361c96726514d656ad5005678c. This version is not approved for use until a human operator confirms it."
+    }
+  ],
+  "final_text": "The case “Case A·nominal example values (P1)” passed measurement validation. Using default options (liner height 150 mm, foam thickness 4 mm, overlap 30 mm), the compiler produced version 1 of the contact‑liner pattern. Cut lengths are 387.6 mm (top), 404.6 mm (middle), and 372.6 mm (bottom); pattern width is 403.6 mm. All ten engineering checks passed. No baseline exists for comparison. The build record is ready, awaiting human approval in the browser; the spec SHA‑256 is 9f352dd473eb9d9dfcbe9f802fd7fc85e559d2361c96726514d656ad5005678c. This version is not approved for use until a human operator confirms it.",
+  "stop_reason": "model_finished",
+  "outcome": {
+    "status": "compiled",
+    "version": 1,
+    "ok": true,
+    "height_mm": 150.2,
+    "cut_lengths_mm": [
+      387.6,
+      404.6,
+      372.6
+    ],
+    "pattern_width_mm": 403.6,
+    "overlap_mm": 30,
+    "failed_checks": [],
+    "checks_passed": 10,
+    "checks_total": 10,
+    "options": {
+      "height_mm": 150,
+      "foam_thickness_mm": 4,
+      "overlap_mm": 30
+    },
+    "spec_sha256": "9f352dd473eb9d9dfcbe9f802fd7fc85e559d2361c96726514d656ad5005678c",
+    "human_approval": "pending",
+    "draft_prepared": true
+  },
+  "spec": {
+    "ir_version": "0.1",
+    "device": "hands_free_crutch_liner",
+    "side": "right",
+    "leg": {
+      "circ_top_mm": 345,
+      "circ_mid_mm": 362,
+      "circ_bottom_mm": 330,
+      "shin_length_mm": 380,
+      "knee_width_mm": 98,
+      "source": "example_values"
+    },
+    "liner": {
+      "height_mm": 150,
+      "foam_thickness_mm": 4,
+      "overlap_mm": 30,
+      "crest_channel_mm": 14,
+      "straps": 2
+    },
+    "layers": [
+      {
+        "role": "liner",
+        "material": "EVA / neoprene foam",
+        "thickness_mm": 4
+      },
+      {
+        "role": "crest_relief",
+        "material": "soft foam",
+        "thickness_mm": 3
+      }
+    ],
+    "calibration": {
+      "length_add_mm": [
+        0,
+        0,
+        0
+      ],
+      "source": "default"
+    },
+    "constraints": {
+      "min_overlap_mm": 20,
+      "bounds": {
+        "circumferenceMm": [
+          260,
+          480
+        ],
+        "shinLengthMm": [
+          250,
+          450
+        ],
+        "kneeWidthMm": [
+          80,
+          150
+        ],
+        "linerHeightMm": [
+          100,
+          200
+        ]
+      }
+    }
+  },
+  "totals": {
+    "model_calls": 5,
+    "prompt_tokens": 7031,
+    "completion_tokens": 522,
+    "total_tokens": 7553,
+    "wall_ms": 7133
+  },
+  "limits": {
+    "maxTurns": 8,
+    "maxToolCallsPerTurn": 3,
+    "maxTokens": 900,
+    "requestTimeoutMs": 30000,
+    "workflowTimeoutMs": 120000
+  },
+  "authority": "All numbers, checks and the outcome are computed by deterministic code; the model selects tools and explains.",
+  "provenance": {
+    "measurements": "example_values",
+    "physical_measurement_verified": false,
+    "clinical_validation": false,
+    "human_approval": "not granted by agent"
+  }
+}
