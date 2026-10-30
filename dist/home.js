@@ -128,6 +128,7 @@
       ? `<article class="card" data-k="${k}"><span class="lbl">${k + 1} · ${s}</span><span class="num">${esc(d[k][0])}</span><p class="what">${esc(d[k][1])}</p><span class="mode">${esc(d[k][2])}</span></article>`
       : `<article class="card approve" data-k="4"><span class="lbl">5 · Approve</span><span class="num">Clinician</span><p class="what">${esc(c.status[0].toUpperCase() + c.status.slice(1))}. The AI can only draft.</p><a href="./liner.html?view=tech">Open approval gate</a><p class="disc">Design-support prototype, not a medical device; not used on patients. A clinician prescribes and approves every design.</p></article>`).join('');
     document.querySelectorAll('.seg button').forEach((b, i) => b.setAttribute('aria-selected', i === cur));
+    document.dispatchEvent(new CustomEvent('case:change', { detail: cur }));
   }
   function mark(k) {
     document.querySelectorAll('.step').forEach((b, i) => { b.classList.toggle('on', i === k); b.classList.toggle('done', i < k); b.setAttribute('aria-current', i === k ? 'step' : 'false'); });

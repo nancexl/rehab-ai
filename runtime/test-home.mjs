@@ -65,3 +65,26 @@ console.log('home page tests passed');
   assert.match(page, /A · Ankle fracture/); assert.match(page, /B · Diabetic foot ulcer, incl\. dialysis/);
   console.log('why-it-matters tests passed');
 }
+
+// v8 engineering workbench: three views, 9-step tracker, honest test report, hand-off with traceability.
+{
+  const { readFileSync: rf } = await import('node:fs');
+  const page = rf(new URL('../dist/index.html', import.meta.url), 'utf8'), wb = rf(new URL('../dist/workbench.js', import.meta.url), 'utf8');
+  assert.match(page, /id="workbench"/); assert.match(page, /workbench\.js/);
+  for (const v of ['patient', 'clinician', 'manufacturer']) assert.ok(page.includes(`data-v="${v}"`), v);
+  assert.match(wb, /\['Scan', 'Body model', 'Movement', 'Simulate', 'Design', 'Engineering tests', 'Clinician approve', 'Files', 'Follow-up \/ re-scan'\]/);
+  const W = (() => { const window = {}; const document = { querySelector: () => null, addEventListener() {} }; new Function('window', 'document', wb)(window, document); return window.__workbench.W; })();
+  for (const [id, c] of Object.entries(W)) {
+    assert.equal(c.track.length, 9, id + ' track');
+    for (const t of c.tests) assert.ok(['pass', 'warn', 'fail', 'next'].includes(t[0]), id + ' status');
+    for (const t of c.tests.filter(t => t[0] === 'next')) assert.equal(t[2], 'not computed', 'next rows carry no numbers');
+    assert.ok(c.tests.some(t => t[0] === 'next'), id + ' shows what is next');
+  }
+  assert.equal(W.case1.track[2][0], 'next', 'movement capture is next'); assert.equal(W.case2.track[2][0], 'next');
+  assert.equal(W.case1.tests.filter(t => t[0] === 'pass').length >= 5, true);
+  assert.match(W.case1.tests.find(t => t[0] === 'warn')[2], /355 \/ 393 \/ 357/);
+  assert.match(W.case1.tests.find(t => t[0] === 'fail')[2], /620 mm/);
+  assert.match(wb, /not approved yet/); assert.match(wb, /Patients never see an approve button/);
+  assert.ok(!/print-ready/i.test(wb));
+  console.log('workbench tests passed');
+}

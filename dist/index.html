@@ -72,6 +72,18 @@
       </details>
     </section>
 
+    <section class="wb" id="workbench" aria-labelledby="wbH">
+      <h2 id="wbH" class="kicker">Engineering workbench · one case, three sides</h2>
+      <p class="wb-case" id="wbCase"></p>
+      <div class="wb-views" id="wbViews" role="tablist" aria-label="Choose a view">
+        <button type="button" role="tab" data-v="patient">Patient</button><button type="button" role="tab" data-v="clinician">Clinician</button><button type="button" role="tab" data-v="manufacturer">Manufacturer</button>
+      </div>
+      <div class="wb-grid">
+        <ol class="wb-track" id="wbTrack" aria-label="Case step tracker"></ol>
+        <div class="wb-body" id="wbBody" aria-live="polite"></div>
+      </div>
+    </section>
+
     <section class="loop" id="loop" aria-labelledby="loopH">
       <h2 id="loopH" class="kicker">Data loop</h2>
       <p class="big">Every scan, re-scan and approved version becomes a hashed record. Today one person; next, body and movement data across mobility-impaired populations.</p>
@@ -101,5 +113,6 @@
   <script src="./home.js"></script>
   <script src="./demo-data.js"></script>
   <script src="./demo.js"></script>
+  <script src="./workbench.js"></script>
 </body>
 </html>
