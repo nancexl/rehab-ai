@@ -116,3 +116,5 @@ body[data-view="choose"] .story .chooser::before{content:"Choose a view to start
   .story-card,.patient{padding:14px}
 }
 @media(max-width:480px){.pt-pain{grid-template-columns:minmax(0,1fr)}}
+.measure .hint,.cmp .hint{white-space:normal;overflow-wrap:anywhere;max-width:100%;overflow:visible;text-overflow:clip}
+.measure label{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
