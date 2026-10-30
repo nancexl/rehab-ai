@@ -15,9 +15,11 @@ assert.match(html, /Rehab AI is a platform that models the person with their dev
 assert.match(html, /id="todayNext"/, 'today-vs-next note');
 assert.match(html, /Next, not built yet:<\/b> movement capture from patient video, and body \+ device load simulation/);
 for (const s of ['2 · Capture movement', '3 · Simulate body + device']) { const li = html.slice(html.indexOf(s), html.indexOf('</li>', html.indexOf(s))); assert.match(li, /class="t next"/, s + ' labelled next'); }
-assert.match(js, /A · Ankle fracture: iWALK liner/); assert.match(js, /B · Diabetic foot: insole/);
-assert.match(html, /Run demo/);
+assert.match(js, /A · Ankle fracture: iWALK liner/); assert.match(js, /B · Forefoot offloading insole/); assert.ok(!/Diabetic foot: insole/.test(js));
+assert.match(html, /Run the demo/); assert.match(html, /href="\?demo=1"/);
 assert.match(html, /href="\.\/liner\.html">Engineering view/);
+// v9: one headline stat per scenario on the surface; everything else inside the collapsed Evidence panel.
+{ const ev = html.indexOf('<details class="evidence"'); assert.ok(ev > 0, 'evidence panel'); const surface = html.slice(0, ev); assert.ok(!surface.includes('Ready 2018') && !surface.includes('Kerr 2019'), 'secondary stats live in Evidence'); assert.match(surface, /37%/); assert.match(surface, /40%/); }
 for (const f of ['lab.html', 'compiler.html']) {
   const has = existsSync(new URL('../dist/' + f, import.meta.url)), linked = html.includes(`href="./${f}"`);
   if (f === 'lab.html') assert.equal(linked, has, 'lab.html linked iff it ships'); else if (linked) assert.ok(has, f + ' linked but missing');
@@ -87,4 +89,12 @@ console.log('home page tests passed');
   assert.match(wb, /not approved yet/); assert.match(wb, /Patients never see an approve button/);
   assert.ok(!/print-ready/i.test(wb));
   console.log('workbench tests passed');
+}
+
+// v9 workbench status: honest summary, never 'all passed' when a row warns or fails.
+{
+  const { readFileSync: rf } = await import('node:fs');
+  const wb = rf(new URL('../dist/workbench.js', import.meta.url), 'utf8');
+  assert.match(wb, /All engineering checks passed/); assert.match(wb, /if \(!warn && !fail\)/);
+  console.log('v9 status tests passed');
 }

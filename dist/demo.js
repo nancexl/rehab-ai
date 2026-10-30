@@ -43,14 +43,14 @@
       if (!cv.isConnected) return;
       const el = reduce ? 9 : (t - start) / 1000 * SP, sweep = Math.min(1, el / 2.4);
       ctx.clearRect(0, 0, W, H);
-      const g = ctx.createRadialGradient(cx, base, 4, cx, base, rMax * s * 1.8); g.addColorStop(0, 'rgba(14,20,24,.16)'); g.addColorStop(1, 'rgba(14,20,24,0)');
+      const g = ctx.createRadialGradient(cx, base, 4, cx, base, rMax * s * 1.8); g.addColorStop(0, 'rgba(46,230,166,.22)'); g.addColorStop(1, 'rgba(46,230,166,0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, base, rMax * s * 1.6, rMax * s * 0.35, 0, 0, 7); ctx.fill();
       const zTop = zMax * sweep;
       prof.slice().reverse().forEach(([z, girth], j) => {
         if (z > zTop) return; const r = girth / (2 * Math.PI) * s, y = base - z * s, inZone = z >= 225 && z <= 375;
-        ctx.strokeStyle = inZone ? 'rgba(11,138,104,.9)' : 'rgba(14,20,24,.35)'; ctx.lineWidth = (inZone ? 1.6 : 1) * DPR;
+        ctx.strokeStyle = inZone ? 'rgba(11,138,104,.9)' : 'rgba(220,228,234,.45)'; ctx.lineWidth = (inZone ? 1.6 : 1) * DPR;
         ctx.beginPath(); ctx.ellipse(cx, y, r, r * 0.22, 0, 0, Math.PI); ctx.stroke();
-        ctx.strokeStyle = inZone ? 'rgba(11,138,104,.25)' : 'rgba(14,20,24,.08)';
+        ctx.strokeStyle = inZone ? 'rgba(11,138,104,.25)' : 'rgba(220,228,234,.10)';
         ctx.beginPath(); ctx.ellipse(cx, y, r, r * 0.22, 0, Math.PI, 2 * Math.PI); ctx.stroke();
       });
       if (sweep < 1) { const y = base - zTop * s; ctx.fillStyle = 'rgba(11,138,104,.95)'; ctx.fillRect(cx - rMax * s * 1.5, y - DPR, rMax * s * 3, 2 * DPR); }

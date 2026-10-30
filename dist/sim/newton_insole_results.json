@@ -1,0 +1,96 @@
+{
+  "label": "SIMPLIFIED XPBD APPROXIMATION - not validated soft-tissue or plantar-pressure simulation",
+  "engine": "NVIDIA Newton 1.6.1 / Warp 1.18.0, CPU, SolverXPBD, 10 iterations, 150 steps @ 1 ms",
+  "assumptions": {
+    "EVA_E_Pa": 2000000.0,
+    "EVA_nu": 0.3,
+    "stiffness_scale_for_stability": 0.001,
+    "note": "EVA modulus/Poisson are ASSUMED (no value in repo); foot = 5 static rigid spheres indenting 2.0 mm (displacement-controlled), bottom pinned, gravity off, voxel 4x4x1.5 mm"
+  },
+  "geometry": {
+    "source": "case2 compiler output (sample synthetic foot, 252 mm)",
+    "layers": [
+      {
+        "role": "base",
+        "material": "EVA",
+        "thickness_mm": 3
+      },
+      {
+        "role": "relief",
+        "material": "EVA",
+        "thickness_mm": 3
+      }
+    ],
+    "relief_window_mm": {
+      "type": "ellipse",
+      "cx": 23.7,
+      "cy": 136.1,
+      "rx": 14,
+      "ry": 16.099999999999998
+    }
+  },
+  "flat": {
+    "particles": 6505,
+    "tets": 24220,
+    "wall_s": 5.1,
+    "regions": {
+      "heel": {
+        "peak_compression_mm": 2.34,
+        "particles_in_contact": 15,
+        "max_residual_penetration_mm": 0.181
+      },
+      "MT1_head": {
+        "peak_compression_mm": 2.316,
+        "particles_in_contact": 8,
+        "max_residual_penetration_mm": 0.1
+      },
+      "MT3_head": {
+        "peak_compression_mm": 2.506,
+        "particles_in_contact": 9,
+        "max_residual_penetration_mm": 0.041
+      },
+      "MT5_head": {
+        "peak_compression_mm": 2.512,
+        "particles_in_contact": 9,
+        "max_residual_penetration_mm": 0.039
+      },
+      "hallux": {
+        "peak_compression_mm": 2.33,
+        "particles_in_contact": 8,
+        "max_residual_penetration_mm": 0.223
+      }
+    }
+  },
+  "offloaded": {
+    "particles": 6441,
+    "tets": 23760,
+    "wall_s": 5.0,
+    "regions": {
+      "heel": {
+        "peak_compression_mm": 2.34,
+        "particles_in_contact": 15,
+        "max_residual_penetration_mm": 0.182
+      },
+      "MT1_head": {
+        "peak_compression_mm": 2.316,
+        "particles_in_contact": 8,
+        "max_residual_penetration_mm": 0.099
+      },
+      "MT3_head": {
+        "peak_compression_mm": 2.507,
+        "particles_in_contact": 9,
+        "max_residual_penetration_mm": 0.042
+      },
+      "MT5_head": {
+        "peak_compression_mm": 0.122,
+        "particles_in_contact": 0,
+        "max_residual_penetration_mm": 0.0
+      },
+      "hallux": {
+        "peak_compression_mm": 2.33,
+        "particles_in_contact": 8,
+        "max_residual_penetration_mm": 0.223
+      }
+    }
+  }
+}

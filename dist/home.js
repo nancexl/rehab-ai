@@ -32,14 +32,14 @@
   const CLAY = [222, 213, 203], GREEN = [11, 138, 104];
   function draw(yaw, sweep) {
     const W = cv.width, H = cv.height; ctx.clearRect(0, 0, W, H);
-    if (!rings) { ctx.fillStyle = '#5d6b75'; ctx.font = `${13 * DPR}px system-ui,sans-serif`; ctx.textAlign = 'center'; ctx.fillText(loadMsg, W / 2, H / 2); return; }
+    if (!rings) { ctx.fillStyle = '#8b97a1'; ctx.font = `${13 * DPR}px system-ui,sans-serif`; ctx.textAlign = 'center'; ctx.fillText(loadMsg, W / 2, H / 2); return; }
     const s = H / 470, cx = W / 2, base = H * 0.93, c = Math.cos(yaw), si = Math.sin(yaw), tilt = 0.28;
     const R = ([x, y, z]) => [x * c - y * si, x * si + y * c, z];
     const P = ([x, y, z]) => { const xr = x * c - y * si, yr = x * si + y * c; return [cx + xr * s, base - z * s + yr * s * tilt, yr]; };
     const zTop = 420 * sweep;
     // ground shadow
     const g = ctx.createRadialGradient(cx, base + 4 * DPR, 2, cx, base + 4 * DPR, 95 * s);
-    g.addColorStop(0, 'rgba(14,20,24,.22)'); g.addColorStop(1, 'rgba(14,20,24,0)');
+    g.addColorStop(0, 'rgba(46,230,166,.28)'); g.addColorStop(1, 'rgba(46,230,166,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, base + 4 * DPR, 95 * s, 22 * s, 0, 0, 7); ctx.fill();
     const quads = [], N = rings[0].length;
     let last = 0;
@@ -79,7 +79,7 @@
   }
   if (!reduce) {
     const t0 = performance.now();
-    (function loop(t) { const el = (t - t0) / 1000, cyc = el % 9; draw(el * 0.6, Math.min(1, cyc / 2.2)); requestAnimationFrame(loop); })(t0);
+    (function loop(t) { if (cv.dataset.off) return; const el = (t - t0) / 1000, cyc = el % 9; draw(el * 0.6, Math.min(1, cyc / 2.2)); requestAnimationFrame(loop); })(t0);
   }
 
   // ---------- 'Why it matters' count-ups (values are the sourced text; animation only) ----------
@@ -95,7 +95,7 @@
 
   // ---------- stepper + one card per step ----------
   const STEPS = ['Scan', 'Design', 'Check', 'File', 'Approve'];
-  const SHORT = { case1: 'A · Ankle fracture: iWALK liner', case2: 'B · Diabetic foot: insole', case3: 'Simulation: Newton test piece' };
+  const SHORT = { case1: 'A · Ankle fracture: iWALK liner', case2: 'B · Forefoot offloading insole', case3: 'Simulation: Newton test piece' };
   // One key number per card; every value is copied from cases/cases.json for that case.
   const CARD = {
     case1: [
@@ -170,6 +170,6 @@
   });
   $('#stepper').addEventListener('click', e => { const b = e.target.closest('.step'); if (b && CASES.length) go(+b.dataset.k); });
   $('#playBtn').addEventListener('click', () => CASES.length && replay());
-  $('#runBtn').addEventListener('click', () => { if (CASES.length) replay(0); else if (window.__demo) window.__demo.start(); else $('#how').scrollIntoView(); });
+  $('#runBtn').addEventListener('click', e => { if (window.__demo) { e.preventDefault(); window.__demo.start(); } });
   window.__home = { replay };
 })();

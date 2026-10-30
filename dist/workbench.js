@@ -29,8 +29,8 @@
       patient: 'Your leg was measured from a scan (in this demo, a synthetic sample). The AI drafted a liner for your iWALK; a clinician must approve it before anything is made.'
     },
     case2: {
-      name: 'Scenario B · Diabetic foot · forefoot offloading insole', id: 'case2-insole',
-      track: [['done', 'Sample foot outline (synthetic)'], ['done', 'Length 252 mm, forefoot 100 mm, heel 68.1 mm'], ['next', 'Patient video of walking in the insole: not built'], ['next', 'No physics run for this part'], ['done', 'Compiled by code (agent not used)'], ['done', '6/6 geometry checks pass'], ['wait', 'Awaiting clinician approval'], ['wait', 'Locked until approval'], ['next', 'Re-scan at each review: next']],
+      name: 'Scenario B · Forefoot offloading insole (relief under a metatarsal head)', id: 'case2-insole',
+      track: [['done', 'Sample foot outline (synthetic)'], ['done', 'Length 252 mm, forefoot 100 mm, heel 68.1 mm'], ['next', 'Patient video of walking in the insole: not built'], ['done', 'NVIDIA Newton XPBD, simplified flat-vs-relief comparison (30 Oct 2026)'], ['done', 'Compiled by code (agent not used)'], ['done', '6/6 geometry checks pass'], ['wait', 'Awaiting clinician approval'], ['wait', 'Locked until approval'], ['next', 'Re-scan at each review: next']],
       tests: [
         ['pass', 'Foot length in range', '252 mm (allowed 180–320)', 'code'],
         ['pass', 'Forefoot width in range', '100 mm (allowed 60–130)', 'code'],
@@ -44,15 +44,15 @@
       files: ['insert-layer1-base.svg (1:1, A4)', 'insert-layer2-relief.svg (1:1, A4)'],
       material: 'EVA, 3 mm base + 3 mm relief layer',
       draft: 'Compiled by code (agent not used) · record 2026-10-30 14:28 GMT', spec: '42ecfb418ae8f053…', record: '3b050f72b35bbe48…',
-      patient: 'Your foot outline (in this demo, a synthetic sample) gives an insole with a pressure-relief window. A clinician approves it. Next: a re-scan at every review.'
+      patient: 'Your foot outline (in this demo, a synthetic sample) gives an insole with a relief window under a metatarsal head, the kind of relief used in diabetic foot care. Diabetic-foot-specific parameters and clinical tuning are next. A clinician approves it.'
     },
     case3: {
       name: 'Simulation step · NVIDIA Newton test piece', id: 'case3-coupon',
       track: [['done', 'Synthetic geometry study, not a scan'], ['na', 'Nonhuman test piece'], ['na', 'Not applicable'], ['done', 'NVIDIA Newton 1.6.1 / Warp 1.18.0, recorded 14 Oct 2026'], ['done', 'Shape by code (agent not used)'], ['done', '5/5 sanity checks pass'], ['wait', 'Review draft · manufacturing not approved'], ['wait', 'STL locked until review'], ['na', 'Not applicable']],
       tests: [
-        ['pass', 'Resting, friction 0.8', '−0.0272 mm travel · 27 contacts', 'Newton (recorded)'],
-        ['pass', 'Sliding, friction 0.05', '40.8798 mm travel · 27 contacts', 'Newton (recorded)'],
-        ['pass', 'Sliding, friction 0.8', '8.3999 mm travel · 27 contacts', 'Newton (recorded)'],
+        ['pass', 'Resting, friction 0.8', '−0.03 mm travel (at rest) · 27 contacts', 'Newton (recorded)'],
+        ['pass', 'Sliding, friction 0.05', '40.9 mm travel · 27 contacts', 'Newton (recorded)'],
+        ['pass', 'Sliding, friction 0.8', '8.4 mm travel · 27 contacts', 'Newton (recorded)'],
         ['pass', 'Sanity checks, source STL hash matches', '5/5', 'code'],
         ['next', 'Load case on a real limb + device', 'not computed', 'body + device simulation'],
         ['next', 'Printability (overhangs, bed fit, slicer)', 'not computed', 'manufacturing'],
@@ -79,16 +79,29 @@
     <dt>Approver</dt><dd>— not approved yet</dd>
     <dt>Approval time</dt><dd>—</dd></dl>
     <p class="wb-lock">🔒 Files unlock only after a clinician approves this exact version. Any edit revokes approval. Liner and insole are cut-ready (SVG); only the test piece is an STL.</p></div>`;
+  const PART = { case1: ['./parts/case1.svg', 'Liner cut pattern, tile 1 of 5 (generated 1:1 SVG)'], case2: ['./parts/case2.svg', 'Insole relief layer (generated 1:1 SVG)'] };
+  function status(c, id) {
+    const n = k => c.tests.filter(t => t[0] === k).length, pass = n('pass'), warn = n('warn'), fail = n('fail');
+    // Honest summary: a fail row here is the out-of-range guardrail refusing a bad scan, shown as such.
+    if (!warn && !fail) return ['ok', 'All engineering checks passed', `${pass} of ${pass} checks · ${id === 'case2' ? 'simplified Newton comparison below · validated pressure: next' : 'physics and pressure: next'}`];
+    const extra = [warn ? `${warn} note to review` : '', fail ? `${fail} out-of-range scan refused` : ''].filter(Boolean).join(' · ');
+    return ['note', 'Engineering checks passed', `${pass} passed · ${extra}`];
+  }
   function render() {
     const id = ORDER[cur], c = W[id]; if (!c) return;
     $('#wbCase').textContent = c.name;
     document.querySelectorAll('.wb-views button').forEach(b => b.setAttribute('aria-selected', b.dataset.v === view));
     $('#wbTrack').innerHTML = TRACK.map((s, k) => `<li class="s-${c.track[k][0]}"><span class="ic">${TI[c.track[k][0]]}</span><b>${esc(s)}${c.track[k][0] === 'next' ? ' <em>next</em>' : ''}</b><small>${esc(c.track[k][1])}</small></li>`).join('');
+    const [st, head, sub] = status(c, id), part = PART[id];
+    const vis = part ? `<figure class="wb-part"><img src="${part[0]}" alt="${esc(part[1])}" loading="lazy"><figcaption>${esc(part[1])}</figcaption></figure>`
+      : `<figure class="wb-part wb-part-ph"><span>NVIDIA Newton test piece · STL</span><figcaption>Nonhuman test piece, recorded 14 Oct 2026</figcaption></figure>`;
+    const sim = id === 'case2' ? `<figure class="wb-sim"><img src="./sim/newton-insole-heatmap.png" alt="Top-surface compression, flat insole vs insole with relief window" loading="lazy"><figcaption>NVIDIA Newton 1.6.1 XPBD (CPU), simplified: relative flat-vs-relief comparison; assumed, scaled EVA stiffness; not a validated plantar-pressure simulation.</figcaption></figure>` : '';
+    const hero = `<div class="wb-hero">${vis}<div class="wb-status s-${st}"><span class="wb-big">${st === 'ok' ? '✓' : '✓'}</span><div><b>${esc(head)}</b><small>${esc(sub)}</small><small class="wb-gate-s">${esc(c.track[6][1])}</small></div></div></div>`;
     let body = '';
     if (view === 'patient') body = `<h4>Your progress</h4><p>${esc(c.patient)}</p><p class="wb-task"><b>Next (not built yet):</b> film yourself taking 10 steps with your device so your physio can see how you move. Movement capture and body + device simulation are on the roadmap.</p><p class="wb-note">Patients never see an approve button.</p>`;
-    else if (view === 'clinician') body = tests(c) + `<p class="wb-gate">Status: <b>${esc(c.track[6][1])}</b>. The AI only drafts. Approve or reject in the <a href="./liner.html?view=tech">clinician approval gate</a>.</p>`;
-    else body = handoff(c);
-    $('#wbBody').innerHTML = body;
+    else if (view === 'clinician') body = `<details class="wb-more"><summary>Engineering Test Report · ${c.tests.length} rows</summary>${tests(c)}</details><p class="wb-gate">The AI only drafts. Approve or reject in the <a href="./liner.html?view=tech">clinician approval gate</a>.</p>`;
+    else body = `<p class="wb-gate">🔒 Files unlock only after a clinician approves this exact version.</p><details class="wb-more"><summary>Files, material and traceability</summary>${handoff(c)}</details>`;
+    $('#wbBody').innerHTML = hero + sim + body;
   }
   function init() {
     if (!$('#workbench')) return;

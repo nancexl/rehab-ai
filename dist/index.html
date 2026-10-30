@@ -5,62 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rehab AI · Fit the device to the person</title>
   <meta name="description" content="Rehab AI is a platform that models the person, how they move with their crutch, boot or insole, and the device together, then drafts a custom design a clinician approves." />
-  <meta name="theme-color" content="#f6f7f8" />
+  <meta name="theme-color" content="#07090b" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Ccircle cx=%225%22 cy=%225%22 r=%224%22 fill=%22%230b8a68%22/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="./home.css" />
   <link rel="stylesheet" href="./demo.css" />
+  <link rel="stylesheet" href="./theme-v9.css" />
 </head>
 <body>
   <header class="bar">
     <a class="brand" href="./"><span class="dot" aria-hidden="true"></span>Rehab AI</a>
-    <a class="eng" href="./liner.html">Engineering view</a>
+    <a class="eng" href="#workbench">Workbench</a>
   </header>
 
   <main>
     <section class="hero" id="top">
-      <div class="hero-copy">
-        <h1>Fit the device to the person.</h1>
-        <p class="sub">Body, movement and device in one model (movement: next). Clinician&#8209;approved.</p>
-        <button class="cta" id="runBtn" type="button">Run demo</button>
-      </div>
       <figure class="hero-vis">
+        <div class="hero3d" id="hero3d" aria-label="Interactive 3D sample leg scan with the liner part; drag to rotate"></div>
         <canvas id="heroCanvas" width="640" height="640" aria-label="Rotating 3D sample leg scan with the liner zone highlighted"></canvas>
         <figcaption><span class="tag">Sample scan · synthetic</span></figcaption>
       </figure>
+      <div class="hero-copy">
+        <h1>Fit the device to the person.</h1>
+        <p class="sub">AI designs it, code checks it, a clinician approves it.</p>
+        <a class="cta" id="runBtn" href="?demo=1" role="button">Run the demo</a>
+      </div>
     </section>
 
     <section class="how" id="how" aria-labelledby="howH">
-      <h2 id="howH" class="lede">Mobility devices are prescribed for a body nobody measured and a way of moving nobody watched. Rehab AI is a platform that models the person with their device, then drafts a custom design a clinician approves.</h2>
+      <h2 id="howH" class="lede">Rehab AI is a platform that models the person with their device, then drafts a custom design a clinician approves.</h2>
       <ol class="platform" aria-label="Platform steps">
-        <li><b>1 · Model the body</b><span>Phone LiDAR / camera scan</span><em class="t today">Today: sample scan</em></li>
-        <li><b>2 · Capture movement</b><span>Patient films using the device; physio involved</span><em class="t next">Next</em></li>
-        <li><b>3 · Simulate body + device</b><span>Where load goes, hotspots, back / hip / other-leg compensation. Newton runs on a test piece today.</span><em class="t next">Next</em></li>
-        <li><b>4 · Custom design</b><span>Nemotron drafts, code checks, clinician approves</span><em class="t today">Today</em></li>
-        <li><b>5 · Data loop</b><span>Every scan and re-scan becomes a versioned record</span><em class="t today">Today: hashed records · Next: population data</em></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10 6h4M9 12a3 3 0 0 0 6 0"/></svg></span><b>1 · Model the body</b><span>Phone scan becomes a body model</span><em class="t today">Today</em></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 7M12 13l3 7M8 10h8"/></svg></span><b>2 · Capture movement</b><span>Patient films walking with the device</span><em class="t next">Next</em></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></span><b>3 · Simulate body + device</b><span>NVIDIA Newton on a test piece today</span><em class="t next">Next</em></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 19l-5-3-5 3 1.4-6.2L4 9l5.8-.7z"/></svg></span><b>4 · AI design + checks</b><span>Nemotron drafts, code checks every number</span><em class="t today">Today</em></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/><circle cx="12" cy="12" r="10"/></svg></span><b>5 · Approve, make, re-scan</b><span>Clinician approves; cut-ready files; re-scan loop</span><em class="t today">Today</em></li>
       </ol>
-      <div class="why" aria-labelledby="whyH">
-        <h3 id="whyH">Why it matters · two scenarios</h3>
-        <p class="scen"><b>A · Ankle fracture, ~6 protected weeks</b> on an iWALK, walking boot or knee scooter.</p>
-        <ul class="stats">
-          <li><b>107–132</b><span>ankle fractures per 100,000 people a year; women 75–84 peak at 248</span><cite>Court-Brown 1998; Swedish cohort</cite></li>
-          <li><b data-to="67" data-suf="%">67%</b><span>of walking-boot users developed new pain elsewhere (back, hip, knee)</span><cite>Ready 2018</cite></li>
-          <li><b data-to="37" data-suf="%">37%</b><span>of knee-scooter users fell</span><cite>Walsh 2023</cite></li>
-          <li><b>~6 weeks</b><span>of protected or non-weight-bearing walking</span><cite>typical pathway</cite></li>
-        </ul>
-        <p class="scen"><b>B · Diabetic foot ulcer, incl. dialysis</b>: an offloading insole, re-scanned at every review.</p>
-        <ul class="stats">
-          <li><b>£837–962m</b><span>a year to NHS England for diabetic foot ulcers and amputations</span><cite>Kerr 2019</cite></li>
-          <li><b>40% → 65%</b><span>of healed ulcers recur within 1 year → 5 years</span><cite>Armstrong 2017</cite></li>
-          <li><b data-to="30.5" data-dec="1" data-suf="%">30.5%</b><span>5-year mortality after a diabetic foot ulcer</span><cite>Armstrong 2020</cite></li>
-          <li><b>HR 7.6</b><span>for foot ulceration on dialysis vs CKD stage 3</span><cite>Otte 2015</cite></li>
-        </ul>
-        <p class="vision"><b>Fit is the lever.</b> In patients who wore custom offloading footwear, recurrence was 25.7% vs 47.8% <cite>(Bus 2013; no significant difference overall)</cite>.</p>
-        <p class="todaynext" id="todayNext"><b>Today vs next.</b> Today: sample scan → Nemotron design → code checks → cut-ready files → clinician approval, and NVIDIA Newton on a nonhuman test piece. <b>Next, not built yet:</b> movement capture from patient video, and body + device load simulation.</p>
+
+      <div class="scen-row" aria-label="Two scenarios">
+        <article class="scen-card"><span class="sk">Scenario A · Ankle fracture, ~6 protected weeks</span><b class="hs">37%</b><p>of knee-scooter users fell.</p><cite>Walsh 2023</cite></article>
+        <article class="scen-card"><span class="sk">Scenario B · Diabetic foot care, incl. dialysis</span><b class="hs">40%</b><p>of healed diabetic foot ulcers come back within a year.</p><cite>Armstrong 2017</cite><small class="scen-today">Today: a forefoot offloading insole (relief under a metatarsal head), the kind of relief used in diabetic foot care. Diabetic-foot parameters and clinical tuning: next.</small></article>
       </div>
 
       <div class="controls">
         <div class="seg" id="seg" role="tablist" aria-label="Choose a case"></div>
-        <span class="ctl"><button class="play ghost2" id="playBtn" type="button">Play</button> <button class="play" id="demoBtn" type="button">30-second demo</button></span>
+        <span class="ctl"><button class="play ghost2" id="playBtn" type="button">Replay</button> <button class="play" id="demoBtn" type="button">30-second demo</button></span>
       </div>
 
       <ol class="stepper" id="stepper" aria-label="Pipeline steps"></ol>
@@ -70,6 +58,15 @@
         <summary>Run log <span id="logStep"></span></summary>
         <div class="stage" id="stage" aria-live="polite"></div>
       </details>
+    </section>
+
+    <section class="studio" id="studio" aria-labelledby="stH">
+      <h2 id="stH" class="kicker">Design studio · pick a patient, change the inputs</h2>
+      <div class="st-pick" role="group" aria-label="Choose a patient scenario"><button type="button" data-s="A" aria-pressed="true">A · Ankle fracture · iWALK liner</button><button type="button" data-s="B" aria-pressed="false">B · Forefoot offloading insole</button></div>
+      <div class="st-grid">
+        <div class="st-3d" aria-label="3D design preview; drag to rotate, scroll to zoom"><span class="tag st-tag">Live 3D · drag to rotate</span></div>
+        <div class="st-side"><div class="st-status" aria-live="polite"></div><form class="st-form" onsubmit="return false"></form></div>
+      </div>
     </section>
 
     <section class="wb" id="workbench" aria-labelledby="wbH">
@@ -84,13 +81,35 @@
       </div>
     </section>
 
-    <section class="loop" id="loop" aria-labelledby="loopH">
-      <h2 id="loopH" class="kicker">Data loop</h2>
-      <p class="big">Every scan, re-scan and approved version becomes a hashed record. Today one person; next, body and movement data across mobility-impaired populations.</p>
-      <ul class="hashes" id="hashes"></ul>
-    </section>
+    
 
     <section class="more">
+      <details class="evidence" id="evidence">
+        <summary>Evidence, sources and records</summary>
+        <div class="why" aria-labelledby="whyH">
+        <h3 id="whyH">Why it matters · two scenarios</h3>
+        <p class="scen"><b>A · Ankle fracture, ~6 protected weeks</b> on an iWALK, walking boot or knee scooter.</p>
+        <ul class="stats">
+          <li><b>107–132</b><span>ankle fractures per 100,000 people a year; women 75–84 peak at 248</span><cite>Court-Brown 1998; Swedish cohort</cite></li>
+          <li><b>67%</b><span>of walking-boot users developed new pain elsewhere (back, hip, knee)</span><cite>Ready 2018</cite></li>
+          <li><b>37%</b><span>of knee-scooter users fell</span><cite>Walsh 2023</cite></li>
+          <li><b>~6 weeks</b><span>of protected or non-weight-bearing walking</span><cite>typical pathway</cite></li>
+        </ul>
+        <p class="scen"><b>B · Diabetic foot ulcer, incl. dialysis</b> (motivation). Today's part is a forefoot offloading insole (relief under a metatarsal head), the kind of relief used in diabetic foot care; diabetic-foot-specific parameters and clinical tuning are next.</p>
+        <ul class="stats">
+          <li><b>£837–962m</b><span>a year to NHS England for diabetic foot ulcers and amputations</span><cite>Kerr 2019</cite></li>
+          <li><b>40% → 65%</b><span>of healed ulcers recur within 1 year → 5 years</span><cite>Armstrong 2017</cite></li>
+          <li><b>30.5%</b><span>5-year mortality after a diabetic foot ulcer</span><cite>Armstrong 2020</cite></li>
+          <li><b>HR 7.6</b><span>for foot ulceration on dialysis vs CKD stage 3</span><cite>Otte 2015</cite></li>
+        </ul>
+        <p class="vision"><b>Fit is the lever.</b> In patients who wore custom offloading footwear, recurrence was 25.7% vs 47.8% <cite>(Bus 2013; no significant difference overall)</cite>.</p>
+        <p class="todaynext" id="todayNext"><b>Today vs next.</b> Today: sample scan → Nemotron design → code checks → cut-ready files → clinician approval, and NVIDIA Newton on a nonhuman test piece. <b>Next, not built yet:</b> movement capture from patient video, and body + device load simulation.</p>
+        </div>
+        <h3>Live Nemotron runs, 30 Oct 2026</h3>
+        <ul class="hashes"><li>A · liner: 5 calls · 7,784 tokens · 5.1 s · compiled · claim audit pass</li><li>B · insole: 4 calls · 4,173 tokens · 4.8 s</li></ul>
+        <h3>Data loop · hashed build records</h3>
+        <ul class="hashes" id="hashes"></ul>
+      </details>
       <details>
         <summary>What is real</summary>
         <ul>
@@ -110,9 +129,13 @@
     <p>Nebius Token Factory · NVIDIA Nemotron · NVIDIA Newton · MIT · <a href="./liner.html">Engineering view</a></p>
   </footer>
   <script src="./scan-core.js"></script>
+  <script src="./liner-core.js"></script>
+  <script src="./compiler-core.js"></script>
   <script src="./home.js"></script>
   <script src="./demo-data.js"></script>
   <script src="./demo.js"></script>
   <script src="./workbench.js"></script>
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+  <script type="module" src="./viewer3d.js"></script>
 </body>
 </html>
