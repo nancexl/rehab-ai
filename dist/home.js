@@ -10,39 +10,87 @@
   const DPR = Math.min(2, devicePixelRatio || 1);
   function size() { const r = cv.getBoundingClientRect(); cv.width = r.width * DPR; cv.height = r.height * DPR; }
   size(); addEventListener('resize', size);
-  let rings = null; const zone = [225, 375];
-  fetch('samples/sample-leg-scan.obj').then(r => r.text()).then(t => {
+  // v7 renderer: shaded surface (filled quads, smooth normals, key + rim light, back-face cull, depth sort,
+  // end cap, ground shadow). Same sample OBJ as before; only the drawing changed.
+  let rings = null, norms = null, loadMsg = 'Loading sample scan…'; const zone = [225, 375];
+  fetch('samples/sample-leg-scan.obj').then(r => { if (!r.ok) throw new Error(r.status); return r.text(); }).then(t => {
     const m = ScanCore.parseOBJ(t), N = 48, n = m.v.length / 3; rings = [];
     for (let j = 0; j * N < n; j++) { const ring = []; for (let i = 0; i < N; i++) { const k = (j * N + i) * 3; ring.push([m.v[k], m.v[k + 1], m.v[k + 2]]); } rings.push(ring); }
+    // smooth per-vertex normals: radial direction in the ring plane + slope of the radius along z
+    norms = rings.map((ring, j) => {
+      const cx = ring.reduce((a, p) => a + p[0], 0) / N, cy = ring.reduce((a, p) => a + p[1], 0) / N;
+      const up = rings[Math.min(rings.length - 1, j + 1)], dn = rings[Math.max(0, j - 1)];
+      return ring.map((p, i) => {
+        const dx = p[0] - cx, dy = p[1] - cy, r = Math.hypot(dx, dy) || 1;
+        const dr = Math.hypot(up[i][0] - cx, up[i][1] - cy) - Math.hypot(dn[i][0] - cx, dn[i][1] - cy), dz = (up[i][2] - dn[i][2]) || 1;
+        const nz = -dr / dz, L = Math.hypot(1, nz); return [dx / r / L, dy / r / L, nz / L];
+      });
+    });
     if (reduce) draw(0.6, 1);
-  }).catch(() => {});
+  }).catch(() => { loadMsg = 'Sample scan could not load. Open via a local web server.'; draw(0, 1); });
+  const KEY = (() => { const v = [-0.55, -0.6, 0.58], l = Math.hypot(...v); return v.map(x => x / l); })();
+  const CLAY = [222, 213, 203], GREEN = [11, 138, 104];
   function draw(yaw, sweep) {
     const W = cv.width, H = cv.height; ctx.clearRect(0, 0, W, H);
-    if (!rings) return;
+    if (!rings) { ctx.fillStyle = '#5d6b75'; ctx.font = `${13 * DPR}px system-ui,sans-serif`; ctx.textAlign = 'center'; ctx.fillText(loadMsg, W / 2, H / 2); return; }
     const s = H / 470, cx = W / 2, base = H * 0.93, c = Math.cos(yaw), si = Math.sin(yaw), tilt = 0.28;
+    const R = ([x, y, z]) => [x * c - y * si, x * si + y * c, z];
     const P = ([x, y, z]) => { const xr = x * c - y * si, yr = x * si + y * c; return [cx + xr * s, base - z * s + yr * s * tilt, yr]; };
     const zTop = 420 * sweep;
-    rings.forEach((ring, j) => {
-      const z = ring[0][2]; if (z > zTop) return;
-      const inZone = z >= zone[0] && z <= zone[1];
-      if (!inZone && j % 3) return;
-      for (let i = 0; i < ring.length; i++) {
-        const a = P(ring[i]), b = P(ring[(i + 1) % ring.length]), front = (a[2] + b[2]) / 2 < 0;
-        ctx.strokeStyle = inZone ? (front ? 'rgba(11,138,104,.95)' : 'rgba(11,138,104,.22)') : (front ? 'rgba(14,20,24,.45)' : 'rgba(14,20,24,.08)');
-        ctx.lineWidth = (inZone ? 2 : 1) * DPR;
-        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    // ground shadow
+    const g = ctx.createRadialGradient(cx, base + 4 * DPR, 2, cx, base + 4 * DPR, 95 * s);
+    g.addColorStop(0, 'rgba(14,20,24,.22)'); g.addColorStop(1, 'rgba(14,20,24,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, base + 4 * DPR, 95 * s, 22 * s, 0, 0, 7); ctx.fill();
+    const quads = [], N = rings[0].length;
+    let last = 0;
+    for (let j = 0; j + 1 < rings.length; j++) {
+      if (rings[j + 1][2] > zTop) break; last = j + 1;
+      const r0 = rings[j], r1 = rings[j + 1], n0 = norms[j], n1 = norms[j + 1], z = (r0[0][2] + r1[0][2]) / 2, inZone = z >= zone[0] && z <= zone[1];
+      for (let i = 0; i < N; i++) {
+        const i2 = (i + 1) % N, nm = R([(n0[i][0] + n0[i2][0] + n1[i][0] + n1[i2][0]) / 4, (n0[i][1] + n0[i2][1] + n1[i][1] + n1[i2][1]) / 4, (n0[i][2] + n1[i][2]) / 2]);
+        if (nm[1] > 0.12) continue; // faces away from the viewer
+        const pts = [P(r0[i]), P(r0[i2]), P(r1[i2]), P(r1[i])];
+        const diff = Math.max(0, nm[0] * KEY[0] + nm[1] * KEY[1] + nm[2] * KEY[2]), rim = Math.pow(1 - Math.min(1, Math.abs(nm[1])), 2.2) * 0.28;
+        const k = 0.38 + 0.62 * diff, base3 = inZone ? CLAY.map((v, q) => v * 0.4 + GREEN[q] * 0.6) : CLAY;
+        const col = base3.map(v => Math.min(255, Math.round(v * k + 255 * rim)));
+        quads.push([(pts[0][2] + pts[2][2]) / 2, pts, `rgb(${col})`]);
       }
-    });
-    for (let i = 0; i < 48; i += 4) {
-      ctx.beginPath(); let first = true;
-      rings.forEach((ring, j) => { if (ring[0][2] > zTop || j % 2) return; const p = P(ring[i]); first ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]); first = false; });
-      ctx.strokeStyle = 'rgba(14,20,24,.12)'; ctx.lineWidth = DPR; ctx.stroke();
+    }
+    quads.sort((a, b) => b[0] - a[0]);
+    ctx.lineWidth = 0.7 * DPR; ctx.lineJoin = 'round';
+    for (const [, p, col] of quads) {
+      ctx.fillStyle = ctx.strokeStyle = col; ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]); ctx.lineTo(p[1][0], p[1][1]); ctx.lineTo(p[2][0], p[2][1]); ctx.lineTo(p[3][0], p[3][1]); ctx.closePath(); ctx.fill(); ctx.stroke();
+    }
+    // measurement slices in the liner zone (front half only, faint)
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = DPR;
+    for (let j = 0; j <= last; j += 3) {
+      const ring = rings[j], z = ring[0][2]; if (z < zone[0] || z > zone[1]) continue;
+      ctx.beginPath(); let on = false;
+      for (let i = 0; i <= N; i++) { const p = P(ring[i % N]); if (p[2] < 0) { on ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); on = true; } else on = false; }
+      ctx.stroke();
+    }
+    // top end cap so the surface never looks hollow
+    if (last > 0) {
+      const ring = rings[last]; ctx.beginPath(); ring.forEach((v, i) => { const p = P(v); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }); ctx.closePath();
+      const zc = ring[0][2], inZ = zc >= zone[0] && zc <= zone[1];
+      ctx.fillStyle = inZ ? 'rgb(120,183,163)' : 'rgb(236,230,223)'; ctx.fill(); ctx.strokeStyle = 'rgba(14,20,24,.12)'; ctx.stroke();
     }
     if (sweep < 1) { const y = base - zTop * s; ctx.fillStyle = 'rgba(11,138,104,.9)'; ctx.fillRect(cx - 120 * s, y - 1.5 * DPR, 240 * s, 3 * DPR); }
   }
   if (!reduce) {
     const t0 = performance.now();
     (function loop(t) { const el = (t - t0) / 1000, cyc = el % 9; draw(el * 0.6, Math.min(1, cyc / 2.2)); requestAnimationFrame(loop); })(t0);
+  }
+
+  // ---------- 'Why it matters' count-ups (values are the sourced text; animation only) ----------
+  const statEls = document.querySelectorAll('.stats b[data-to]');
+  if (statEls.length && !reduce && 'IntersectionObserver' in window) {
+    const so = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return; so.unobserve(e.target);
+      const el = e.target, to = +el.dataset.to, dec = +(el.dataset.dec || 0), suf = el.dataset.suf || '', t0 = performance.now();
+      (function f(t) { const k = Math.min(1, (t - t0) / 900), v = to * (1 - Math.pow(1 - k, 3)); el.textContent = (k < 1 ? v.toFixed(dec) : el.dataset.to) + suf; if (k < 1) requestAnimationFrame(f); })(t0);
+    }), { threshold: 0.6 });
+    statEls.forEach(el => so.observe(el));
   }
 
   // ---------- stepper + one card per step ----------

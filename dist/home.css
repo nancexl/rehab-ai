@@ -86,3 +86,16 @@ section{padding:72px 0}
   section{padding:48px 0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+.ctl{display:inline-flex;gap:8px}.play.ghost2{background:var(--card);color:var(--text);border:1px solid var(--line)}
+.why{margin:8px 0 28px}
+.why h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 12px}
+.stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stats li{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px;transition:transform .2s ease,box-shadow .2s ease}
+.stats li:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(14,20,24,.07)}
+.stats b{font-size:1.7rem;letter-spacing:-.03em;color:var(--accent);font-variant-numeric:tabular-nums}
+.stats span{font-size:.9rem;line-height:1.35}
+.stats cite,.vision cite{font-style:normal;font-size:.72rem;color:var(--muted)}
+.towel{margin:16px 0 6px;font-size:1rem;line-height:1.45}
+.vision{margin:0;font-size:.9rem;color:var(--muted)}.vision b{color:var(--text)}
+@media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.stats b{font-size:1.3rem}}
+@media (prefers-reduced-motion:reduce){.stats li{transition:none}}

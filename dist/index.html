@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#f6f7f8" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Ccircle cx=%225%22 cy=%225%22 r=%224%22 fill=%22%230b8a68%22/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="./home.css" />
+  <link rel="stylesheet" href="./demo.css" />
 </head>
 <body>
   <header class="bar">
@@ -24,16 +25,27 @@
       </div>
       <figure class="hero-vis">
         <canvas id="heroCanvas" width="640" height="640" aria-label="Rotating 3D sample leg scan with the liner zone highlighted"></canvas>
-        <figcaption><span class="tag">Sample scan</span></figcaption>
+        <figcaption><span class="tag">Sample scan · synthetic</span></figcaption>
       </figure>
     </section>
 
     <section class="how" id="how" aria-labelledby="howH">
-      <h2 id="howH" class="lede">Rehab AI turns one phone scan into a clinician-approved, custom-fit contact part for the crutch, boot or insole you already have — so the weeks you can't walk hurt less.</h2>
+      <h2 id="howH" class="lede">Nobody designs where your body meets the crutch, boot or insole in the weeks you can't walk. Rehab AI turns one phone scan into a clinician-approved, custom-fit contact part for the crutch, boot or insole you already have — so the weeks you can't walk hurt less.</h2>
+      <div class="why" aria-labelledby="whyH">
+        <h3 id="whyH">Why it matters</h3>
+        <ul class="stats">
+          <li><b data-to="67" data-suf="%">67%</b><span>of walking-boot users developed new pain elsewhere</span><cite>Ready 2018</cite></li>
+          <li><b data-to="17.6" data-dec="1" data-suf="%">17.6%</b><span>of 216 leg-cast patients developed heel pressure sores</span><cite>Forni 2009</cite></li>
+          <li><b>42.9% → 3.6%</b><span>heel sores in at-risk patients when polyurethane foam was added inside casts</span><cite>J Clin Nurs 2011</cite></li>
+          <li><b data-to="43" data-suf="%">43%</b><span>of knee-scooter users fell; two-thirds were never taught to use one</span><cite>Yeoh 2021</cite></li>
+        </ul>
+        <p class="towel"><b>Why not a towel?</b> A towel can't measure your girth, can't place a relief channel over the shin crest, isn't checked, and nobody signs it off. Rehab AI does all four.</p>
+        <p class="vision"><b>Next: diabetic foot offloading.</b> Custom offloading cut ulcer recurrence from 47.8% to 25.7% when worn <cite>(Bus 2013; no significant difference overall)</cite>.</p>
+      </div>
 
       <div class="controls">
         <div class="seg" id="seg" role="tablist" aria-label="Choose a case"></div>
-        <button class="play" id="playBtn" type="button">Play</button>
+        <span class="ctl"><button class="play ghost2" id="playBtn" type="button">Play</button> <button class="play" id="demoBtn" type="button">30-second demo</button></span>
       </div>
 
       <ol class="stepper" id="stepper" aria-label="Pipeline steps"></ol>
@@ -72,5 +84,7 @@
   </footer>
   <script src="./scan-core.js"></script>
   <script src="./home.js"></script>
+  <script src="./demo-data.js"></script>
+  <script src="./demo.js"></script>
 </body>
 </html>
