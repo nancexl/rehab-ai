@@ -1,0 +1,105 @@
+{
+  "schema": "rehab-build-record/0.1",
+  "case": "case2-insole",
+  "device": "Forefoot offloading insole insert",
+  "created": "2026-10-30T14:28:16.477Z",
+  "disclaimer": "Design demo. Not a medical device. Not for wearing on a person; not load-bearing.",
+  "steps": [
+    {
+      "step": "scan",
+      "mode": "deterministic",
+      "input": "samples/sample-foot-outline.json",
+      "input_sha256": "4457ee00121380420cf4544212bbdf43464794c654ec866be1bbb386c8e566d0",
+      "metrics": {
+        "length_mm": 252,
+        "forefoot_width_mm": 100,
+        "heel_width_mm": 68.1
+      },
+      "note": "SAMPLE SCAN (synthetic outline)."
+    },
+    {
+      "step": "design",
+      "mode": "deterministic",
+      "note": "Compiled by code; agent not used for this case.",
+      "scenario": "Distal fracture · conservative",
+      "relief": {
+        "center_mm": [
+          23.7,
+          136.1
+        ],
+        "radius_mm": 14,
+        "source": "scenario_default"
+      },
+      "layers": [
+        {
+          "role": "base",
+          "material": "EVA",
+          "thickness_mm": 3
+        },
+        {
+          "role": "relief",
+          "material": "EVA",
+          "thickness_mm": 3
+        }
+      ]
+    },
+    {
+      "step": "check",
+      "mode": "deterministic",
+      "checks": [
+        {
+          "id": "foot_length_in_range",
+          "ok": true,
+          "detail": "252 mm (allowed 180–320)"
+        },
+        {
+          "id": "forefoot_width_in_range",
+          "ok": true,
+          "detail": "100 mm (allowed 60–130)"
+        },
+        {
+          "id": "relief_radius_allowed",
+          "ok": true,
+          "detail": "14 mm (max 24)"
+        },
+        {
+          "id": "relief_keeps_border",
+          "ok": true,
+          "detail": "7.8 mm border (min 6)"
+        },
+        {
+          "id": "calibration_plausible",
+          "ok": true,
+          "detail": "scale 1.000 × 1.000"
+        },
+        {
+          "id": "relief_window_inside",
+          "ok": true,
+          "detail": "7.7 mm minimum border around the 14×16 mm window"
+        }
+      ],
+      "note": "Geometry checks (code). No Newton run for this part."
+    },
+    {
+      "step": "file",
+      "mode": "deterministic",
+      "files": [
+        {
+          "file": "evidence/live/pipeline-case2-insole/insert-layer1-base.svg",
+          "sha256": "6ee12f98835901e07fbfbf46f8d636636bb378ef60d1a2cb3e08defa433df7f8"
+        },
+        {
+          "file": "evidence/live/pipeline-case2-insole/insert-layer2-relief.svg",
+          "sha256": "6f994d7fedb23ff4e2ef1b1f241d82f27d48e6fffab6ba1ba5be117c7c1b3bb3"
+        }
+      ],
+      "spec_sha256": "42ecfb418ae8f0538c930cb272c2333c74299edb0b670136bc59ff285176f2e1"
+    },
+    {
+      "step": "approve",
+      "mode": "human_gate",
+      "status": "awaiting_clinician_approval"
+    }
+  ],
+  "record_sha256": "3b050f72b35bbe488cb6d958386fc79c70f4b36cf9a5a4e132193b5a7111e775"
+}

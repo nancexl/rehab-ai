@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rehab AI · From phone scan to print-ready</title>
+  <meta name="description" content="One pipeline from phone scan to a print-ready, clinician-approved assistive device design. Built on Nebius Token Factory with NVIDIA Nemotron." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Ccircle cx=%225%22 cy=%225%22 r=%224%22 fill=%22%235ef2c8%22/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./home.css" />
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="./"><span class="dot" aria-hidden="true"></span>Rehab AI</a>
+    <a class="eng" href="./liner.html">Engineering view</a>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <h1>From phone scan to print&#8209;ready in&nbsp;minutes.</h1>
+        <p class="sub">One AI pipeline for personalised rehab devices, checked before&nbsp;printing.</p>
+        <button class="cta" id="runBtn" type="button">Run the pipeline <span aria-hidden="true">→</span></button>
+      </div>
+      <figure class="hero-vis">
+        <canvas id="heroCanvas" width="640" height="640" aria-label="Rotating 3D sample leg scan with the liner zone highlighted"></canvas>
+        <figcaption><span class="tag">Sample scan</span> <span id="heroStage">liner zone</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="story" id="story" aria-labelledby="storyH">
+      <h2 id="storyH" class="kicker">Why</h2>
+      <p class="big">Neo has had four foot and ankle injuries.</p>
+      <p>In 2026 a right-foot cast meant weeks of no weight on that foot. Crutches took both hands: carrying things, opening doors, cooking, working. A wheelchair didn't fit daily life, and the healthy side got overloaded.</p>
+    </section>
+
+    <section class="pipe" id="pipeline" aria-labelledby="pipeH">
+      <h2 id="pipeH" class="kicker">The pipeline</h2>
+      <ol class="strip" id="strip"></ol>
+      <p class="note">Pains: industry estimates (internal market report, 19 Oct 2026).</p>
+    </section>
+
+    <section class="cases" id="cases" aria-labelledby="casesH">
+      <h2 id="casesH" class="kicker">Same pipeline, three devices</h2>
+      <div class="cards" id="cards"></div>
+      <div class="replay" id="replay" hidden>
+        <div class="replay-head"><h3 id="replayTitle"></h3><button type="button" class="ghost" id="replayClose" aria-label="Close replay">✕</button></div>
+        <ol class="progress" id="progress"></ol>
+        <div class="stage" id="stage" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="loop" id="loop" aria-labelledby="loopH">
+      <h2 id="loopH" class="kicker">The data loop</h2>
+      <p class="big">Every case becomes a hashed, versioned build record. Each fit and re-scan feeds the next design.</p>
+      <ul class="hashes" id="hashes"></ul>
+    </section>
+
+    <section class="more">
+      <details>
+        <summary>How it works, and what is real</summary>
+        <ul>
+          <li><b>Agent.</b> NVIDIA Nemotron (<code>nvidia/nemotron-3-super-120b-a12b</code>) on Nebius Token Factory chooses bounded tools: read case, validate, compile, compare, prepare build record. It never computes a number: deterministic code does.</li>
+          <li><b>Claim audit.</b> Every number in the agent's explanation must appear in a tool result. In Case 1 v2 it flagged three rounded numbers; the record shows that.</li>
+          <li><b>Case 1</b> ran live today on Nemotron (v1, v2 re-scan, out-of-range refusal). <b>Case 2</b> was compiled by code; the agent was not used for it. <b>Case 3</b> shows a recorded NVIDIA Newton (Warp) CPU contact run from 14 Oct 2026 on the exported coupon STL; not re-run live.</li>
+          <li><b>Simulate step.</b> Cases 1 and 2 use deterministic geometry checks, not physics. Newton has only been run on the rigid nonhuman coupon against a plane: no limb contact, no pressure map.</li>
+          <li><b>Scans.</b> All inputs are sample (synthetic) scans shipped in <code>dist/samples/</code>. No real person was scanned. Shin length and knee width in Case 1 are fixed sample values.</li>
+          <li><b>Approval.</b> Only a human can approve; the agent can at most prepare a draft. Try the gate in the <a href="./liner.html?view=tech">clinician view</a>. The insert (Case 2) is compiled by <code>dist/compiler-core.js</code> via <code>tools/run_pipeline_cases.mjs</code>.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Industry pains, sources</summary>
+        <p>Industry estimates from an internal market report (19 Oct 2026): specialist scanner and technician needed; 30–60+ min manual rectification per device; remakes 3–17% (traditional AFO to early CAD/CAM); 1–2 weeks for an insole, 2–4 weeks for an AFO or socket; NHS orthotics waits average 7 weeks; ~1,250 UK prosthetists and orthotists, with a technician shortage.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="disc">Design demo. Not a medical device. Not for wearing on a person; not load-bearing.</p>
+    <p>Built on Nebius Token Factory with NVIDIA Nemotron · MIT · <a href="./liner.html">Engineering view</a></p>
+  </footer>
+  <script src="./scan-core.js"></script>
+  <script src="./home.js"></script>
+</body>
+</html>

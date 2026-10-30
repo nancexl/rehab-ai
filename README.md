@@ -1,34 +1,40 @@
-# Rehab AI · hands-free crutch contact-liner compiler, driven by an NVIDIA Nemotron agent
+# Rehab AI · one pipeline from phone scan to print-ready rehab devices, driven by an NVIDIA Nemotron agent
 
-Crutches take both hands. A hands-free (knee) crutch gives them back, but the place where the shin rests, the **contact liner**, is where it hurts. Rehab AI is a small *hardware compiler* for that liner. Leg measurements go in. Out comes a versioned, full-scale cut pattern with engineering checks and a build record that a **person has to approve**.
+**Clinician-in-the-loop design support for temporary-injury mobility gear.** Rehab AI runs one pipeline for every device: **scan → design → simulate → file → approve**, then a re-scan feeds the next version. An **NVIDIA Nemotron** agent (`nvidia/nemotron-3-super-120b-a12b`) on **Nebius Token Factory** drives the design step through bounded tool calls. Deterministic code computes every number, a claim audit checks the model's prose, and only a person can approve a build.
 
-An **NVIDIA Nemotron** model running on **Nebius Token Factory** drives the compiler through function calling. It reads the case, validates it, compiles, compares against the previous version and prepares a draft build record. It then explains the result in plain language. It never computes a number and it can never approve.
-
-> **Not a medical device.** This is a design prototype. The liner is a comfort layer for an existing commercial hands-free crutch. It is **not load-bearing** and **not for patient use**. All measurements in this repo are *example* or *synthetic* values. Nothing here has been clinically validated or fitted on a person.
+> **Design demo. Not a medical device. Not for wearing on a person; not load-bearing.** All scans and measurements here are *sample* or *synthetic*. Nothing has been clinically validated or fitted on a person.
 
 ## Who it's for
 
-Two users, and possibly two businesses. Neither has been validated with real customers yet.
+- **People on crutches after a foot or ankle injury.** The founder, Neo, has had four foot and ankle injuries. In 2026 a right-foot cast meant a period with no weight on that foot. Crutches took both hands (carrying things, doors, cooking, working), a wheelchair didn't fit daily life, and the healthy side got overloaded.
+- **Clinicians, orthotists and central-fab technicians** who design and approve the device. Rehab AI drafts the design; they decide.
 
-| | **Crutch users after a foot/ankle injury** | **Central-fab orthotic labs and NHS-contracted providers** |
+## The pipeline and the pain each step replaces (industry estimates)
+
+| Step | What Rehab AI does | Pain it replaces |
 |---|---|---|
-| Role | End user of a hands-free (iWALK-type) knee crutch | Operator and buyer of the design tool (for example Opcare, Peacocks, Blatchford, Ottobock UK; Hanger in the US) |
-| Problem | For 6–8+ weeks after a foot/ankle injury, people lose independence. Mobility aids are one-size-fits-all, take up the hands, hurt at the contact points and don't match the person's home and tasks. With a hands-free crutch the pain moves to where the shin rests, and nobody makes that liner to fit you | Technicians are scarce. The baseline workflow is 30–60+ minutes of manual rectification per device and 1–2 weeks for an insole (2–4 weeks for an AFO/socket). Remakes run from 3% (traditional AFO) to 17% (early CAD/CAM AFO) |
-| Value proposition | Comfort and fit: a liner pattern made from your own measurements, re-compiled when your leg changes | Throughput and fewer remakes: a versioned, checked, human-approved pattern with a build record, aiming to cut manual rectification time and remakes (not yet measured) |
+| 1 · Scan | Phone scan (OBJ/STL) → girths and quality checks (`scan-core.js`) | a specialist scanner and technician |
+| 2 · Design | Nemotron agent calls bounded tools; code compiles the pattern | 30–60+ min of manual rectification |
+| 3 · Simulate | Engineering checks; NVIDIA Newton contact check (Case 3, recorded run) | remakes of 3–17% |
+| 4 · File | Print-ready SVG/STL plus a hashed build record | 1–2 weeks for an insole, 2–4 weeks for an AFO/socket; NHS waits average 7 weeks |
+| 5 · Approve | Clinician gate: only a person approves this exact version | drafting by scarce staff (~1,250 UK P&Os, with a technician shortage) |
+| 6 · Loop | Fit → re-scan → v2, with deltas against v1 | every fit improves the next design |
 
-**The moat we are aiming for (a hypothesis):** a long-term *outcome → design* learning loop. Every version records the inputs, the checks, who approved it and what was measured after fitting. Over time that data shows what worked, for whom and on which fabrication setup.
+## Three cases through the same pipeline (`evidence/live/pipeline-*`, replayed on `/`)
 
-Context numbers, from the founder's 19 Oct 2026 market research report (not re-verified for this submission): about 1,250 HCPC-registered prosthetists/orthotists in the UK, and an estimated 1,133–1,803 more technicians needed to meet WHO standards (see the [BAPO workforce report](https://www.bapo.com/landmark-study-reveals-critical-shortage-in-uk-prosthetic-and-orthotic-workforce/)). NHS orthotics waits average 7 weeks (maximum 34).
+| Case | Device | Scan | Design | Simulate | Mode |
+|---|---|---|---|---|---|
+| 1 | Knee-crutch contact liner | `dist/samples/sample-leg-scan.obj` (**sample scan**, synthetic) → 326 / 365 / 327 mm | **Live Nemotron**, 30 Oct 2026: v1 compiled (10/10 checks); re-scan → v2 (−13 / −14.6 / −13.1 mm cut deltas; claim audit flagged rounded numbers in the prose); out-of-range calf 620 mm → refused | code checks | live (~22k tokens) |
+| 2 | Forefoot offloading insole insert | `sample-foot-outline.json` (synthetic) | compiled by code; agent not used for this case | code checks | deterministic |
+| 3 | Nonhuman contact test coupon (STL) | synthetic geometry study | coupon exported by the browser workflow | **NVIDIA Newton** 1.6.1 / Warp 1.18.0 contact check, **recorded 14 Oct 2026**, not re-run: resting −0.03 mm, sliding 8.40 mm (friction 0.8) vs 40.88 mm (friction 0.05), 27 contacts, 5/5 sanity checks | deterministic + recorded |
 
-## User flow
+Every case ends in a SHA-256-hashed build record that is **awaiting approval**, never auto-approved. `node tools/run_pipeline_cases.mjs --offline` rebuilds all three from the saved traces with identical hashes; without `--offline` it re-runs Case 1 live (needs the key).
 
-1. **Intake.** Side, weight-bearing status, home and work context, plus three calf circumferences, shin length and knee width (typed, or imported from a phone scan). Each value carries a provenance label.
-2. **Nemotron agent plans and calls bounded tools.** Deterministic code computes every number. A claim audit then checks the model's explanation against the tool results.
-3. **Checks, a 1:1 A4 pattern and a build record.** 10 engineering checks, full-scale tiled templates with a 100 mm ruler, and a draft build record with spec hashes.
-4. **A human approves this version.** Only a person can approve, and only for the version they reviewed. Editing or recompiling revokes the approval.
-5. **Make, fit on a nonhuman specimen, measure, recompile v2.** The measured result feeds back into the next version.
+**Data loop (hypothesis):** every case leaves a versioned record of inputs, checks, approval and the measured fit, so later designs can learn what worked, for whom and on which setup.
 
-Two entry views ship on `/liner.html`, chosen from the story section or with `?view=crutch|tech`. The **crutch user view** ("I'm on crutches") asks plain-language questions about the injury, the day and where it hurts, takes tape measurements in cm, and checks them against the compiler's ranges without showing engineering numbers. It ends with **"Send to your clinician/technician for review"**, which saves a summary file on the device; nothing is uploaded, and this view cannot build or approve anything. The **technician view** ("I'm a technician") is the full engineering view: Nemotron agent trace, claim audit, checks, 1:1 templates, the human approval gate and the build record. Answers handed over from the crutch user view arrive unapproved, so the technician must compile and review them first.
+## The liner agent in detail (Case 1)
+
+Two entry views ship on `/liner.html` (`?view=crutch|tech`). The **crutch user view** checks tape measurements against the compiler's ranges and can never build or approve. The **technician view** shows the agent trace, claim audit, checks, 1:1 templates, the approval gate and the build record. "Engineering view" on the landing page links here.
 
 ## What it does
 
@@ -79,8 +85,9 @@ Requires Node ≥ 20. There are no npm dependencies.
 
 ```bash
 export NEBIUS_TOKEN_FACTORY_KEY=...        # from the Token Factory console; never commit it
-npm start                                  # → http://127.0.0.1:4173/liner.html
-npm test                                   # offline: mock provider + compiler/record/scan tests (no key, no network)
+npm start                                  # → http://127.0.0.1:4173/  (landing page; /liner.html = engineering view)
+npm test                                   # offline: mock provider + compiler/record/scan/view/landing tests (no key, no network)
+node tools/run_pipeline_cases.mjs --offline # rebuilds the 3 pipeline cases from saved traces
 npm run agent:cases                        # live: re-runs the 3 evidence cases into evidence/live/
 ```
 
@@ -88,7 +95,7 @@ Optional environment variables: `NEBIUS_MODEL`, `PORT`, `HOST`, `AGENT_RATE_MAX`
 
 **Deploy:** `render.yaml` is a Render Blueprint (free web service), with the key set as a dashboard secret. The `Dockerfile` works for Fly.io, Nebius Serverless or Cloud Run, with the key passed as a runtime secret.
 
-## Evidence: real live runs (`evidence/live/`)
+## Evidence: earlier live agent runs (`evidence/live/*.json`)
 
 These are sanitized traces from live calls on 30 Oct 2026. They contain no key and no provider response ids. Each records every model turn (model, latency, tokens, tool calls) and every tool result.
 
@@ -137,6 +144,9 @@ This is not an empty market. Scanning, CAD/CAM and central fabrication are well 
 - **Measurements are example or synthetic.** The phone-scan import is a geometric estimate and is labelled unverified.
 - **Demo hardening is minimal.** There is a per-IP rate limit, a process token budget and a same-origin check, but no authentication.
 - Personas in the UI are synthetic.
+- **Newton is not re-run live.** Case 3 shows a recorded run from 14 Oct 2026; Cases 1 and 2 use code checks only.
+- **Case 2 does not use the agent** (no insert tool yet); it is compiled by code.
+- Pain figures are industry estimates, not our measurements.
 
 ## What changed since 26 Aug 2026
 
@@ -146,6 +156,8 @@ The hackathon opened on 26 Aug 2026. This codebase started on **15 Sep 2026** (f
 - **13–15 Oct:** a bounded experiment workflow with traceable comparisons, replayable records, non-human specimens and a first Token Factory review agent for the geometry lab.
 - **22 Oct:** a contact-liner compiler page with a reviewed specimen export (`liner-core.js`, `liner-record.js`).
 - **30 Oct (this submission):** a **Nemotron tool-calling agent** that drives the liner compiler, with bounded tools, a deterministic outcome, a claim audit, a server-side key with rate and token limits, a UI trace panel, three recorded live cases, offline mock-provider tests and deploy configs.
+
+- **30 Oct (later):** the pipeline landing page (`/`), sample scans, and three end-to-end cases (liner live, insole by code, coupon with recorded Newton check).
 
 ## Licence
 

@@ -1,0 +1,68 @@
+{
+  "schema": "rehab-build-record/0.1",
+  "case": "case3-coupon",
+  "device": "Nonhuman contact coupon (cuff test piece)",
+  "created": "2026-10-30T14:28:16.478Z",
+  "disclaimer": "Design demo. Not a medical device. Not for wearing on a person; not load-bearing.",
+  "steps": [
+    {
+      "step": "scan",
+      "mode": "recorded",
+      "note": "Input is a synthetic geometry study (70 kg / 520 mm / 85 %), not a scan."
+    },
+    {
+      "step": "design",
+      "mode": "deterministic",
+      "note": "Coupon geometry exported by the browser workflow (code). Agent not used."
+    },
+    {
+      "step": "check",
+      "mode": "recorded_newton",
+      "newton": {
+        "recorded": "2026-10-14",
+        "engine": "NVIDIA Newton 1.6.1 / Warp 1.18.0, CPU SolverXPBD, 240 steps at 1/240 s",
+        "source_stl_sha256_matches": true,
+        "mesh": {
+          "vertices": 196,
+          "triangles": 388
+        },
+        "cases": [
+          {
+            "name": "Resting, friction 0.8",
+            "travel_mm": -0.0272,
+            "contacts": 27
+          },
+          {
+            "name": "Sliding, friction 0.05",
+            "travel_mm": 40.8798,
+            "contacts": 27
+          },
+          {
+            "name": "Sliding, friction 0.8",
+            "travel_mm": 8.3999,
+            "contacts": 27
+          }
+        ],
+        "sanity_checks_passed": "5/5",
+        "source": "simulation/NEWTON_SPECIMEN_PROOF.md",
+        "note": "Recorded run (14 Oct 2026), not re-run today. Rigid nonhuman fixture on a plane; diagnostic, not device approval."
+      }
+    },
+    {
+      "step": "file",
+      "mode": "deterministic",
+      "files": [
+        {
+          "file": "evidence/nonhuman-contact-coupon.stl",
+          "sha256": "5c7774c0649bb1a120393529c57326f25f8bf7feb2a2b86fbe50500c5e1f8cad"
+        }
+      ]
+    },
+    {
+      "step": "approve",
+      "mode": "human_gate",
+      "status": "unsent review draft; manufacturing not approved"
+    }
+  ],
+  "record_sha256": "f897a1fc0e38bbf4f49ac35b1243ac52895c0c7aa77fd95d56a552a5b78b339e"
+}

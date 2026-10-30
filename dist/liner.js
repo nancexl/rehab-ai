@@ -167,9 +167,10 @@
       $('scanOut').innerHTML = `<ul class="checks">${q}</ul>` + profileSvg(r);
       if (!r.ok) { $('scanOut').insertAdjacentHTML('afterbegin', '<p class="refusal">Scan not used: fix the issues below (rescan slowly, include knee to ankle) or enter tape measurements.</p>'); return; }
       ['circ_top_mm', 'circ_mid_mm', 'circ_bottom_mm'].forEach((k, i) => { S.leg[k] = Math.round(r.circ_mm[i]); });
-      S.leg.source = 'phone_scan';
+      const sample = /^sample-/i.test(f.name);
+      S.leg.source = sample ? 'synthetic' : 'phone_scan';
       $('legForm').querySelectorAll('input').forEach(el => { el.value = S.leg[el.dataset.k]; });
-      $('legSource').textContent = 'from phone scan · check shin length & knee width';
+      $('legSource').textContent = sample ? 'from SAMPLE scan (synthetic, not a person) · check shin length & knee width' : 'from phone scan · check shin length & knee width';
       resetVersions(); S.userActed = true; run();
     } catch (err) { $('scanOut').innerHTML = `<p class="refusal">${esc(err.message)}</p>`; }
   };

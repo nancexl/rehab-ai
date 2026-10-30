@@ -1,0 +1,185 @@
+{
+  "schema": "rehab-build-record/0.1",
+  "case": "case1-liner",
+  "device": "Knee-crutch contact liner",
+  "created": "2026-10-30T14:28:16.469Z",
+  "disclaimer": "Design demo. Not a medical device. Not for wearing on a person; not load-bearing.",
+  "steps": [
+    {
+      "step": "scan",
+      "mode": "deterministic",
+      "input": "samples/sample-leg-scan.obj",
+      "input_sha256": "b47bc8a900c2e8f9647258ff9d0bfda50ed7c566cbba59222d46e669922c701a",
+      "girths_mm": [
+        325.7,
+        364.7,
+        327.4
+      ],
+      "quality_ok": true,
+      "note": "SAMPLE SCAN (synthetic). Shin length 380 mm and knee width 98 mm are fixed sample values."
+    },
+    {
+      "step": "design",
+      "mode": "live_nemotron",
+      "provider": "Nebius Token Factory",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "tools": [
+        {
+          "name": "read_case",
+          "args": {},
+          "ok": true
+        },
+        {
+          "name": "validate_measurements",
+          "args": {},
+          "ok": true
+        },
+        {
+          "name": "compile_pattern",
+          "args": {
+            "height_mm": 150,
+            "foam_thickness_mm": 4,
+            "overlap_mm": 30
+          },
+          "ok": true
+        },
+        {
+          "name": "prepare_build_record",
+          "args": {},
+          "ok": true
+        }
+      ],
+      "outcome": "compiled",
+      "claim_audit_ok": true,
+      "tokens": 7743,
+      "timestamp": "2026-10-30T14:08:01.535Z"
+    },
+    {
+      "step": "check",
+      "mode": "deterministic",
+      "checks": [
+        {
+          "id": "circ_top_in_range",
+          "ok": true
+        },
+        {
+          "id": "circ_mid_in_range",
+          "ok": true
+        },
+        {
+          "id": "circ_bottom_in_range",
+          "ok": true
+        },
+        {
+          "id": "shin_length_in_range",
+          "ok": true
+        },
+        {
+          "id": "knee_width_in_range",
+          "ok": true
+        },
+        {
+          "id": "liner_fits_shin",
+          "ok": true
+        },
+        {
+          "id": "overlap_sufficient",
+          "ok": true
+        },
+        {
+          "id": "calibration_plausible",
+          "ok": true
+        },
+        {
+          "id": "taper_plausible",
+          "ok": true
+        },
+        {
+          "id": "crest_channel_narrow",
+          "ok": true
+        }
+      ],
+      "note": "Compiler geometry checks (code). No Newton run for this part."
+    },
+    {
+      "step": "file",
+      "mode": "deterministic",
+      "files": [
+        {
+          "file": "evidence/live/pipeline-case1-liner/pattern-v1-page1.svg",
+          "sha256": "3d905e40c6e7f89e9587875987a8fd5e780119017c5555b8c9b6df1ff45406c4"
+        },
+        {
+          "file": "evidence/live/pipeline-case1-liner/pattern-v1-page2.svg",
+          "sha256": "dc7a4e24c7bed9424a1aa06a15dcd8b31ab51e0e79ad348f0ddd978cf993e127"
+        },
+        {
+          "file": "evidence/live/pipeline-case1-liner/pattern-v1-page3.svg",
+          "sha256": "9b4c4921191785b3a2372859e531cd5909955f6e175880193b86322383c61fbe"
+        },
+        {
+          "file": "evidence/live/pipeline-case1-liner/pattern-v1-page4.svg",
+          "sha256": "5c6c1f6e3fe843f4deaee826f2c525f024587097ecef6d693c02d25293a5153b"
+        },
+        {
+          "file": "evidence/live/pipeline-case1-liner/pattern-v1-page5.svg",
+          "sha256": "ab6868217756fdfd779e18184c6192480b8bdd9d69e77fc66d831460c0e9522c"
+        }
+      ],
+      "cut_lengths_mm": [
+        368.3,
+        407.3,
+        370
+      ],
+      "spec_sha256": "8e7b7e34e14e038fbcf42eab2f56a6b70a8fa86dcf0207f50daba8fb9700d06d"
+    },
+    {
+      "step": "approve",
+      "mode": "human_gate",
+      "status": "awaiting_clinician_approval",
+      "draft_prepared": true
+    },
+    {
+      "step": "loop",
+      "mode": "live_nemotron",
+      "v2_outcome": "revised",
+      "input_deltas_mm": {
+        "circ_top_mm": -13,
+        "circ_mid_mm": -14.6,
+        "circ_bottom_mm": -13.1
+      },
+      "cut_length_deltas_mm": [
+        -13,
+        -14.6,
+        -13.1
+      ],
+      "v2_spec_sha256": "59f42fc51f218de8ca5672af77e691fbfa5e0b9ee6877b2b4b58a92129391742",
+      "claim_audit_ok": false
+    },
+    {
+      "step": "guardrail",
+      "mode": "live_nemotron",
+      "outcome": "refused",
+      "measurement_failures": [
+        {
+          "field": "circ_mid_mm",
+          "value": 620,
+          "allowed": [
+            260,
+            480
+          ]
+        },
+        {
+          "field": "taper",
+          "value": 307.3,
+          "allowed": [
+            0,
+            90
+          ]
+        }
+      ],
+      "agent_text": "I’m sorry, but I can’t proceed with compilation because the measurements fail validation:\n\n* **circ_mid_mm** = 620 mm – outside the allowed range **[260, 480]**.\n* **taper** = 307.3 mm – outside the allowed range **[0, 90]**.\n\nSince validation did not pass, I cannot compile or alter the numbers. Please provide corrected measurements within the specified bounds."
+    }
+  ],
+  "record_sha256": "36cbf1fc92cc0e48383567feeef541719f7aa4d73149a6be9044caa4520b65f1"
+}

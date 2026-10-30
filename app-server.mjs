@@ -71,8 +71,8 @@ createServer(async (req, res) => {
   if (url.pathname.startsWith('/api/')) return send(res, 404, { error: 'Unknown API route' });
   let pathname;
   try { pathname = decodeURIComponent(url.pathname); } catch { return send(res, 400, { error: 'bad path' }); }
-  const requested = normalize(join(root, pathname === '/' ? 'liner.html' : pathname));
+  const requested = normalize(join(root, pathname === '/' ? 'index.html' : pathname));
   if (!requested.startsWith(root) || !existsSync(requested) || !statSync(requested).isFile()) return send(res, 404, { error: 'Not found' });
   res.writeHead(200, { 'content-type': types[extname(requested)] || 'application/octet-stream', 'cache-control': 'no-store' });
   createReadStream(requested).pipe(res);
-}).listen(port, host, () => console.log(`Rehab AI demo server on http://${host}:${port}/liner.html (live model: ${process.env.NEBIUS_TOKEN_FACTORY_KEY ? 'configured' : 'NOT configured'})`));
+}).listen(port, host, () => console.log(`Rehab AI demo server on http://${host}:${port}/ (live model: ${process.env.NEBIUS_TOKEN_FACTORY_KEY ? 'configured' : 'NOT configured'})`));
