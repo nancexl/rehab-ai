@@ -41,7 +41,7 @@ It's not just Neo:
 | 2 · Design | Nemotron agent on Nebius Token Factory calls bounded tools; code compiles the pattern |
 | 3 · Check | Deterministic engineering checks (10/10 for the liner) plus a claim audit of the model's numbers |
 | 4 · Simulate | NVIDIA Newton 1.6.1 / Warp 1.18.0 (CPU) contact check on a test piece, **recorded 14 Oct 2026** |
-| 5 · Files | Cut- and print-ready: liner and insole as **1:1 cut patterns** (SVG), test piece as **STL**, plus a SHA-256-hashed build record |
+| 5 · Files | Cut-ready: liner and insole as **1:1 cut patterns** (SVG), test piece as **STL**, plus a SHA-256-hashed build record |
 | 6 · Approve | Clinician gate: only a person approves this exact version; editing or recompiling revokes approval |
 
 **Vision.** Today a crutch liner. Next, pressure-relief parts for people on dialysis and with diabetes, where custom offloading footwear already cuts ulcer recurrence **when it is worn** (25.7% vs 47.8% in adherent patients; not significant overall, 38.8% vs 44.2%; Bus SA 2013, Diabetes Care). Goal: fewer recovery days.
