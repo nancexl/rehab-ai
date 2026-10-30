@@ -11,9 +11,9 @@
 It's not just Neo:
 - **67%** of walking-boot patients developed new or worse pain elsewhere by the time they came out of the boot (n=46). *Ready LV 2018, JAAOS Global, [doi:10.5435/jaaosglobal-d-18-00044](https://doi.org/10.5435/jaaosglobal-d-18-00044).*
 - **Two-thirds (66%)** of knee-scooter users were never taught to use it, and **43% fell**. *Yeoh JC 2021, J Foot Ankle Surg, [PMID 33994082](https://pubmed.ncbi.nlm.nih.gov/33994082/).*
-- In the UK, the start of weight-bearing ranges **from 2 to more than 12 weeks**. *Houchen-Wolloff L 2020, survey of UK foot and ankle surgeons and AHPs, [PMID 32405212](https://pubmed.ncbi.nlm.nih.gov/32405212/).*
+- UK surgeons' advice on when to start weight-bearing ranges **from 2 to more than 12 weeks**. *Houchen-Wolloff L 2020, survey of UK foot and ankle surgeons and AHPs, [PMID 32405212](https://pubmed.ncbi.nlm.nih.gov/32405212/).*
 
-**Insight.** Home rehab apps start after you can walk; the most helpless weeks, on crutches or in a boot, get nothing (desk search, not a systematic scan). 3D scanning already exists. The design step is the bottleneck.
+**Insight.** The home rehab apps we found start once you can walk; the most helpless weeks, on crutches or in a boot, get nothing (desk search, not a systematic scan). 3D scanning already exists. The design step is the bottleneck.
 
 ## Before / after
 
