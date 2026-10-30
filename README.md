@@ -1,24 +1,43 @@
-# Rehab AI · one pipeline from phone scan to print-ready rehab devices, driven by an NVIDIA Nemotron agent
+# Rehab AI · one phone scan to a clinician-approved, custom-fit contact part
 
-**Clinician-in-the-loop design support for temporary-injury mobility gear.** Rehab AI runs one pipeline for every device: **scan → design → simulate → file → approve**, then a re-scan feeds the next version. An **NVIDIA Nemotron** agent (`nvidia/nemotron-3-super-120b-a12b`) on **Nebius Token Factory** drives the design step through bounded tool calls. Deterministic code computes every number, a claim audit checks the model's prose, and only a person can approve a build.
+**Rehab AI turns one phone scan into a clinician-approved, custom-fit contact part for the crutch, boot or insole you already have.** One pipeline for every part: **scan → design → check → simulate → files → approve**. An **NVIDIA Nemotron** agent (`nvidia/nemotron-3-super-120b-a12b`) on **Nebius Token Factory** drives the design step through bounded tool calls. Deterministic code computes every number, a claim audit checks the model's prose, and only a clinician can approve a build. Editing revokes approval.
 
-> **Design demo. Not a medical device. Not for wearing on a person; not load-bearing.** All scans and measurements here are *sample* or *synthetic*. Nothing has been clinically validated or fitted on a person.
+> **Design-support prototype. Not a medical device. Not used on patients. Sample scan.** All scans and measurements here are *sample* or *synthetic*. Nothing has been clinically validated or fitted on a person.
 
-## Who it's for
+## Why
 
-- **People on crutches after a foot or ankle injury.** The founder, Neo, has had four foot and ankle injuries. In 2026 a right-foot cast meant a period with no weight on that foot. Crutches took both hands (carrying things, doors, cooking, working), a wheelchair didn't fit daily life, and the healthy side got overloaded.
-- **Clinicians, orthotists and central-fab technicians** who design and approve the device. Rehab AI drafts the design; they decide.
+**Neo has hurt the same ankle four times, in four countries: the Netherlands, France, China and Vietnam.** Every time: the same one-size crutch, a knee pad that hurt, a towel stuffed underneath.
 
-## The pipeline and the pain each step replaces (industry estimates)
+It's not just Neo:
+- **67%** of walking-boot patients developed new or worse pain elsewhere by the time they came out of the boot (n=46). *Ready LV 2018, JAAOS Global, [doi:10.5435/jaaosglobal-d-18-00044](https://doi.org/10.5435/jaaosglobal-d-18-00044).*
+- **Two-thirds (66%)** of knee-scooter users were never taught to use it, and **43% fell**. *Yeoh JC 2021, J Foot Ankle Surg, [PMID 33994082](https://pubmed.ncbi.nlm.nih.gov/33994082/).*
+- In the UK, the start of weight-bearing ranges **from 2 to more than 12 weeks**. *Houchen-Wolloff L 2020, survey of UK foot and ankle surgeons and AHPs, [PMID 32405212](https://pubmed.ncbi.nlm.nih.gov/32405212/).*
 
-| Step | What Rehab AI does | Pain it replaces |
+**Insight.** Home rehab apps start after you can walk; the most helpless weeks, on crutches or in a boot, get nothing (desk search, not a systematic scan). 3D scanning already exists. The design step is the bottleneck.
+
+## Before / after
+
+| | Traditional | Rehab AI (prototype) |
 |---|---|---|
-| 1 · Scan | Phone scan (OBJ/STL) → girths and quality checks (`scan-core.js`) | a specialist scanner and technician |
-| 2 · Design | Nemotron agent calls bounded tools; code compiles the pattern | 30–60+ min of manual rectification |
-| 3 · Simulate | Engineering checks; NVIDIA Newton contact check (Case 3, recorded run) | remakes of 3–17% |
-| 4 · File | Print-ready SVG/STL plus a hashed build record | 1–2 weeks for an insole, 2–4 weeks for an AFO/socket; NHS waits average 7 weeks |
-| 5 · Approve | Clinician gate: only a person approves this exact version | drafting by scarce staff (~1,250 UK P&Os, with a technician shortage) |
-| 6 · Loop | Fit → re-scan → v2, with deltas against v1 | every fit improves the next design |
+| Custom insole, UK private | about **£300–500** all-in, about **2–4 weeks** (UK clinic price lists) | design in minutes, not weeks (end-to-end time not yet measured) |
+| Custom insole, NHS | about **£100 per pair** to the trust (ELFT FOI 2026); average orthotics wait about **7 weeks** (industry estimate) | materials **$3–22** per printed insole in published studies (Polym Adv Technol 2020; PMC9598360) |
+| Hands-free crutch (iWALK 3.0) | **£210** UK / **$179** US; replacement knee pad **£28**, one size | custom-fit contact liner from a phone scan |
+| Sign-off | clinician designs and approves | **clinician still approves**; the agent drafts, code checks |
+
+**What we don't claim:** no clinical validation, no fitting on a person, no measured time or cost saving, no price, no customers.
+
+## The pipeline
+
+| Step | What Rehab AI does |
+|---|---|
+| 1 · Scan | Phone scan (OBJ/STL) → girths and quality checks (`scan-core.js`); out-of-range scans are refused |
+| 2 · Design | Nemotron agent on Nebius Token Factory calls bounded tools; code compiles the pattern |
+| 3 · Check | Deterministic engineering checks (10/10 for the liner) plus a claim audit of the model's numbers |
+| 4 · Simulate | NVIDIA Newton 1.6.1 / Warp 1.18.0 (CPU) contact check on a test piece, **recorded 14 Oct 2026** |
+| 5 · Files | Cut- and print-ready: liner and insole as **1:1 cut patterns** (SVG), test piece as **STL**, plus a SHA-256-hashed build record |
+| 6 · Approve | Clinician gate: only a person approves this exact version; editing or recompiling revokes approval |
+
+**Vision.** Today a crutch liner. Next, pressure-relief parts for people on dialysis and with diabetes, where custom offloading footwear already cuts ulcer recurrence **when it is worn** (25.7% vs 47.8% in adherent patients; not significant overall, 38.8% vs 44.2%; Bus SA 2013, Diabetes Care). Goal: fewer recovery days.
 
 ## Three cases through the same pipeline (`evidence/live/pipeline-*`, replayed on `/`)
 
@@ -26,7 +45,7 @@
 |---|---|---|---|---|---|
 | 1 | Knee-crutch contact liner | `dist/samples/sample-leg-scan.obj` (**sample scan**, synthetic) → 326 / 365 / 327 mm | **Live Nemotron**, 30 Oct 2026: v1 compiled (10/10 checks); re-scan → v2 (−13 / −14.6 / −13.1 mm cut deltas; claim audit flagged rounded numbers in the prose); out-of-range calf 620 mm → refused | code checks | live (~22k tokens) |
 | 2 | Forefoot offloading insole insert | `sample-foot-outline.json` (synthetic) | compiled by code; agent not used for this case | code checks | deterministic |
-| 3 | Nonhuman contact test coupon (STL) | synthetic geometry study | coupon exported by the browser workflow | **NVIDIA Newton** 1.6.1 / Warp 1.18.0 contact check, **recorded 14 Oct 2026**, not re-run: resting −0.03 mm, sliding 8.40 mm (friction 0.8) vs 40.88 mm (friction 0.05), 27 contacts, 5/5 sanity checks | deterministic + recorded |
+| 3 | Nonhuman contact test piece (STL) | synthetic geometry study | coupon exported by the browser workflow | **NVIDIA Newton** 1.6.1 / Warp 1.18.0 contact check, **recorded 14 Oct 2026**, not re-run: resting −0.03 mm, sliding 8.40 mm (friction 0.8) vs 40.88 mm (friction 0.05), 27 contacts, 5/5 sanity checks | deterministic + recorded |
 
 Every case ends in a SHA-256-hashed build record that is **awaiting approval**, never auto-approved. `node tools/run_pipeline_cases.mjs --offline` rebuilds all three from the saved traces with identical hashes; without `--offline` it re-runs Case 1 live (needs the key).
 
@@ -113,10 +132,10 @@ Observed latency was about 0.6–2.7 s per model call and about 4.5–7 s per fu
 
 No price, paid pilot, customer or unit economics has been established. These are the models we plan to test:
 
-- **Consumer:** a fee per personalised liner, paid by the user (self-pay). The iWALK 3.0 itself costs about $179 in the US and about £169 in the UK, and buyers pay out of pocket (19 Oct market report). In the UK, a liner sold for use with an iWALK is *likely* a Class I accessory: UKCA self-declaration, a technical file and MHRA registration. That is our reading, not legal advice, and the intended purpose decides the route ([MHRA Class I guidance](https://www.gov.uk/government/collections/guidance-on-class-1-medical-devices), [borderline products](https://www.gov.uk/guidance/borderline-products-how-to-tell-if-your-product-is-a-medical-device)).
+- **Consumer:** a fee per personalised contact part, paid by the user (self-pay). Reference prices: iWALK 3.0 is **£210** from UK official distributors and **$179** in the US; its replacement knee-platform pad is **£28** (UK). In the UK, a liner sold for use with an iWALK is *likely* a Class I accessory: UKCA self-declaration, a technical file and MHRA registration. That is our reading, not legal advice, and the intended purpose decides the route ([MHRA Class I guidance](https://www.gov.uk/government/collections/guidance-on-class-1-medical-devices), [borderline products](https://www.gov.uk/guidance/borderline-products-how-to-tell-if-your-product-is-a-medical-device)).
 - **B2B:** per design or per seat for central-fab labs and NHS-contracted providers. One caveat shapes this: **payers buy devices, not software**, so the tool has to pay for itself in lab throughput and avoided remakes.
 
-The handoff also holds an **illustrative** market model (annual potential, low/base/high, GBP; scenario assumptions, not a validated TAM; segments overlap and must not be added together): acute non-weight-bearing £8.9m / £28.4m / £70.2m; Achilles £1.4m / £6.3m / £16.5m; diabetic foot £7.2m / £50.7m / £176m; Charcot £0.8m / £5.6m / £26.3m.
+Reference costs from published sources: UK private custom insoles about £300–500 all-in; NHS about £100 per custom pair to the trust (ELFT FOI 2026); printed-insole materials $3–22 in published studies. An NHS trial found the digital route cost more once staff time was added (£85.68 vs £72.63), so savings are not automatic.
 
 ## Landscape
 
@@ -146,7 +165,7 @@ This is not an empty market. Scanning, CAD/CAM and central fabrication are well 
 - Personas in the UI are synthetic.
 - **Newton is not re-run live.** Case 3 shows a recorded run from 14 Oct 2026; Cases 1 and 2 use code checks only.
 - **Case 2 does not use the agent** (no insert tool yet); it is compiled by code.
-- Pain figures are industry estimates, not our measurements.
+- Figures marked "industry estimate" are unverified; all other numbers above cite their source.
 
 ## What changed since 26 Aug 2026
 
