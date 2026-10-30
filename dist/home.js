@@ -162,9 +162,13 @@
       const io = new IntersectionObserver(es => { if (es[0].isIntersecting && !played) { played = true; replay(null, false); io.disconnect(); } }, { threshold: 0.45 });
       io.observe($('#stepper'));
     }
+  }).catch(() => {
+    // Offline / file:// / missing data: say so plainly and point to the demo, which needs no network.
+    $('#cards').innerHTML = '<p class="loadfail">The case replays could not load (open this page from a web server). The <button type="button" class="play" id="failDemo">30-second demo</button> works offline.</p>';
+    const fd = $('#failDemo'); if (fd) fd.addEventListener('click', () => window.__demo && window.__demo.start());
   });
   $('#stepper').addEventListener('click', e => { const b = e.target.closest('.step'); if (b && CASES.length) go(+b.dataset.k); });
   $('#playBtn').addEventListener('click', () => CASES.length && replay());
-  $('#runBtn').addEventListener('click', () => { if (CASES.length) replay(0); else $('#how').scrollIntoView(); });
+  $('#runBtn').addEventListener('click', () => { if (CASES.length) replay(0); else if (window.__demo) window.__demo.start(); else $('#how').scrollIntoView(); });
   window.__home = { replay };
 })();
