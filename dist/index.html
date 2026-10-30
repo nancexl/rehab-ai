@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rehab AI · One phone scan, cut- and print-ready</title>
-  <meta name="description" content="Rehab AI turns one phone scan into a clinician-approved, custom-fit contact part for the crutch, boot or insole you already have — so the weeks you can't walk hurt less." />
+  <title>Rehab AI · Fit the device to the person</title>
+  <meta name="description" content="Rehab AI is a platform that models the person, how they move with their crutch, boot or insole, and the device together, then drafts a custom design a clinician approves." />
   <meta name="theme-color" content="#f6f7f8" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Ccircle cx=%225%22 cy=%225%22 r=%224%22 fill=%22%230b8a68%22/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="./home.css" />
@@ -19,8 +19,8 @@
   <main>
     <section class="hero" id="top">
       <div class="hero-copy">
-        <h1>One phone scan. Cut&#8209; and print&#8209;ready.</h1>
-        <p class="sub">Custom-fit parts for your crutch, boot or insole. Clinician&#8209;approved.</p>
+        <h1>Fit the device to the person.</h1>
+        <p class="sub">Body, movement and device in one model (movement: next). Clinician&#8209;approved.</p>
         <button class="cta" id="runBtn" type="button">Run demo</button>
       </div>
       <figure class="hero-vis">
@@ -30,17 +30,32 @@
     </section>
 
     <section class="how" id="how" aria-labelledby="howH">
-      <h2 id="howH" class="lede">Nobody designs where your body meets the crutch, boot or insole in the weeks you can't walk. Rehab AI turns one phone scan into a clinician-approved, custom-fit contact part for the crutch, boot or insole you already have — so the weeks you can't walk hurt less.</h2>
+      <h2 id="howH" class="lede">Mobility devices are prescribed for a body nobody measured and a way of moving nobody watched. Rehab AI is a platform that models the person with their device, then drafts a custom design a clinician approves.</h2>
+      <ol class="platform" aria-label="Platform steps">
+        <li><b>1 · Model the body</b><span>Phone LiDAR / camera scan</span><em class="t today">Today: sample scan</em></li>
+        <li><b>2 · Capture movement</b><span>Patient films using the device; physio involved</span><em class="t next">Next</em></li>
+        <li><b>3 · Simulate body + device</b><span>Where load goes, hotspots, back / hip / other-leg compensation</span><em class="t next">Next (Newton runs on a test piece today)</em></li>
+        <li><b>4 · Custom design</b><span>Nemotron drafts, code checks, clinician approves</span><em class="t today">Today</em></li>
+        <li><b>5 · Data loop</b><span>Every scan and re-scan becomes a versioned record</span><em class="t today">Today: hashed records · Next: population data</em></li>
+      </ol>
       <div class="why" aria-labelledby="whyH">
-        <h3 id="whyH">Why it matters</h3>
+        <h3 id="whyH">Why it matters · two scenarios</h3>
+        <p class="scen"><b>A · Ankle fracture, ~6 protected weeks</b> on an iWALK, walking boot or knee scooter.</p>
         <ul class="stats">
-          <li><b data-to="67" data-suf="%">67%</b><span>of walking-boot users developed new pain elsewhere</span><cite>Ready 2018</cite></li>
-          <li><b data-to="17.6" data-dec="1" data-suf="%">17.6%</b><span>of 216 leg-cast patients developed heel pressure sores</span><cite>Forni 2009</cite></li>
-          <li><b>42.9% → 3.6%</b><span>heel sores in at-risk patients when polyurethane foam was added inside casts</span><cite>J Clin Nurs 2011</cite></li>
-          <li><b data-to="43" data-suf="%">43%</b><span>of knee-scooter users fell; two-thirds were never taught to use one</span><cite>Yeoh 2021</cite></li>
+          <li><b>107–132</b><span>ankle fractures per 100,000 people a year; women 75–84 peak at 248</span><cite>Court-Brown 1998; Swedish cohort</cite></li>
+          <li><b data-to="67" data-suf="%">67%</b><span>of walking-boot users developed new pain elsewhere (back, hip, knee)</span><cite>Ready 2018</cite></li>
+          <li><b data-to="37" data-suf="%">37%</b><span>of knee-scooter users fell</span><cite>Walsh 2023</cite></li>
+          <li><b>~6 weeks</b><span>of protected or non-weight-bearing walking</span><cite>typical pathway</cite></li>
         </ul>
-        <p class="towel"><b>Why not a towel?</b> A towel can't measure your girth, can't place a relief channel over the shin crest, isn't checked, and nobody signs it off. Rehab AI does all four.</p>
-        <p class="vision"><b>Next: diabetic foot offloading.</b> Custom offloading cut ulcer recurrence from 47.8% to 25.7% when worn <cite>(Bus 2013; no significant difference overall)</cite>.</p>
+        <p class="scen"><b>B · Diabetic foot ulcer, incl. dialysis</b>: an offloading insole, re-scanned at every review.</p>
+        <ul class="stats">
+          <li><b>£837–962m</b><span>a year to NHS England for diabetic foot ulcers and amputations</span><cite>Kerr 2019</cite></li>
+          <li><b>40% → 65%</b><span>of healed ulcers recur within 1 year → 5 years</span><cite>Armstrong 2017</cite></li>
+          <li><b data-to="30.5" data-dec="1" data-suf="%">30.5%</b><span>5-year mortality after a diabetic foot ulcer</span><cite>Armstrong 2020</cite></li>
+          <li><b>HR 7.6</b><span>for foot ulceration on dialysis vs CKD stage 3</span><cite>Otte 2015</cite></li>
+        </ul>
+        <p class="vision"><b>Fit is the lever.</b> In patients who wore custom offloading footwear, recurrence was 25.7% vs 47.8% <cite>(Bus 2013; no significant difference overall)</cite>.</p>
+        <p class="todaynext" id="todayNext"><b>Today vs next.</b> Today: sample scan → Nemotron design → code checks → cut-ready files → clinician approval, and NVIDIA Newton on a nonhuman test piece. <b>Next, not built yet:</b> movement capture from patient video, and body + device load simulation.</p>
       </div>
 
       <div class="controls">
@@ -59,7 +74,7 @@
 
     <section class="loop" id="loop" aria-labelledby="loopH">
       <h2 id="loopH" class="kicker">Data loop</h2>
-      <p class="big">Every fit and re-scan becomes a versioned record that shapes the next design.</p>
+      <p class="big">Every scan, re-scan and approved version becomes a hashed record. Today one person; next, body and movement data across mobility-impaired populations.</p>
       <ul class="hashes" id="hashes"></ul>
     </section>
 

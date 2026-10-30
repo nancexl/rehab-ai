@@ -1,4 +1,4 @@
-// Landing page contract (v6): short hero, cut- and print-ready wording, 5-step stepper, disclaimer, engineering + lab links, three cases with honest modes and replay data.
+// Landing page contract (v8): platform hero, scenarios A and B, today-vs-next note, 5-step stepper, disclaimer, engineering + lab links, three cases with honest modes and replay data.
 import { readFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
 const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8');
@@ -6,12 +6,16 @@ const js = readFileSync(new URL('../dist/home.js', import.meta.url), 'utf8');
 const text = s => s.replace(/<[^>]+>/g, ' ').replace(/&#8209;/g, '-').replace(/&[#\w]+;/g, ' ').trim();
 const h1 = text(html.match(/<h1>(.*?)<\/h1>/s)[1]);
 assert.ok(h1.split(/\s+/).length <= 8, 'headline <= 8 words');
-assert.match(h1, /Cut- and print-ready/, 'headline says cut- and print-ready, not only print-ready');
+assert.match(h1, /Fit the device to the person/, 'platform headline');
+assert.doesNotMatch(html, /print-ready/i, 'landing must not call liner/insole print-ready');
 const hero = text(html.match(/<header class="bar">.*?<\/section>/s)[0]).split(/\s+/).filter(w => /\w/.test(w));
 assert.ok(hero.length <= 25, `first viewport <= 25 words (got ${hero.length})`);
 assert.match(html, /Sample scan/);
-assert.match(html, /Nobody designs where your body meets the crutch, boot or insole/);
-assert.match(html, /Rehab AI turns one phone scan into a clinician-approved, custom-fit contact part for the crutch, boot or insole you already have/);
+assert.match(html, /Rehab AI is a platform that models the person with their device/);
+assert.match(html, /id="todayNext"/, 'today-vs-next note');
+assert.match(html, /Next, not built yet:<\/b> movement capture from patient video, and body \+ device load simulation/);
+for (const s of ['2 · Capture movement', '3 · Simulate body + device']) { const li = html.slice(html.indexOf(s), html.indexOf('</li>', html.indexOf(s))); assert.match(li, /class="t next"/, s + ' labelled next'); }
+assert.match(js, /A · Ankle fracture: iWALK liner/); assert.match(js, /B · Diabetic foot: insole/);
 assert.match(html, /Run demo/);
 assert.match(html, /href="\.\/liner\.html">Engineering view/);
 for (const f of ['lab.html', 'compiler.html']) {
@@ -23,7 +27,7 @@ assert.ok(html.includes(DISC), 'footer disclaimer');
 assert.ok(js.includes(DISC), 'disclaimer next to approve');
 assert.match(js, /const STEPS = \['Scan', 'Design', 'Check', 'File', 'Approve'\]/);
 assert.match(js, /Newton recorded check on a test piece \(14 Oct\)/);
-assert.doesNotMatch(html, /four fractures|injuries/i);
+assert.doesNotMatch(html, /four fractures/i);
 const { cases } = JSON.parse(readFileSync(new URL('../dist/cases/cases.json', import.meta.url), 'utf8'));
 assert.equal(cases.length, 3);
 for (const c of cases) { assert.equal(c.replay.length, 5); assert.match(c.record_sha256, /^[0-9a-f]{64}$/); }
@@ -51,13 +55,13 @@ console.log('home page tests passed');
   console.log('demo mode tests passed');
 }
 
-// v7 'Why it matters': only the sourced stats, each with its citation.
+// v8 'Why it matters': scenario A and B stats, each with its citation.
 {
   const { readFileSync: rf } = await import('node:fs');
   const page = rf(new URL('../dist/index.html', import.meta.url), 'utf8');
-  for (const [stat, cite] of [['67%', 'Ready 2018'], ['17.6%', 'Forni 2009'], ['42.9% → 3.6%', 'J Clin Nurs 2011'], ['43%', 'Yeoh 2021'], ['47.8% to 25.7% when worn', 'Bus 2013; no significant difference overall']]) {
+  for (const [stat, cite] of [['107–132', 'Court-Brown 1998'], ['67%', 'Ready 2018'], ['37%', 'Walsh 2023'], ['£837–962m', 'Kerr 2019'], ['40% → 65%', 'Armstrong 2017'], ['30.5%', 'Armstrong 2020'], ['HR 7.6', 'Otte 2015'], ['25.7% vs 47.8%', 'Bus 2013; no significant difference overall']]) {
     assert.ok(page.includes(stat), stat); assert.ok(page.includes(cite), cite);
   }
-  assert.match(page, /Why not a towel\?/); assert.match(page, /Rehab AI does all four/);
+  assert.match(page, /A · Ankle fracture/); assert.match(page, /B · Diabetic foot ulcer, incl\. dialysis/);
   console.log('why-it-matters tests passed');
 }

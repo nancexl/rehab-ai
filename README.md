@@ -1,12 +1,19 @@
-# Rehab AI · one phone scan to a clinician-approved, custom-fit contact part
+# Rehab AI · fit the mobility device to the person
 
-**Rehab AI turns one phone scan into a clinician-approved, custom-fit contact part for the crutch, boot or insole you already have.** One pipeline for every part: **scan → design → check → simulate → files → approve**. An **NVIDIA Nemotron** agent (`nvidia/nemotron-3-super-120b-a12b`) on **Nebius Token Factory** drives the design step through bounded tool calls. Deterministic code computes every number, a claim audit checks the model's prose, and only a clinician can approve a build. Editing revokes approval.
+**Rehab AI is a platform that models the person with their mobility device.** (1) Model the body from a phone scan, (2) capture how they move with the device (patient video, physio involved), (3) simulate body + device together (where load goes, pressure hotspots, back/hip/other-leg compensation), (4) generate a custom design that a clinician approves, (5) accumulate body + movement data across mobility-impaired populations (data loop).
+
+**Today vs next.** What runs today: sample scan → NVIDIA Nemotron design (`nvidia/nemotron-3-super-120b-a12b` on **Nebius Token Factory**, bounded tool calls) → deterministic checks → cut-ready files → clinician approval gate (the AI only drafts; editing revokes approval), plus an NVIDIA Newton contact check on a nonhuman test piece (recorded). **Not built yet (next):** movement capture from patient video and body-level load simulation.
+
+**Two scenarios show what the platform is worth:**
+- **A · Ankle fracture, ~6 protected weeks** (iWALK, walking boot, knee scooter). 107–132 per 100,000 a year, women 75–84 peak at 248 per 100,000 (Court-Brown 1998; Swedish cohort). 67% of walking-boot patients developed new pain elsewhere (Ready 2018); 37% of knee-scooter users fell (Walsh 2023, J Orthop Surg Res). Demo output: Case 1, a custom iWALK calf liner (one output of the person + device model).
+- **B · Diabetic foot ulcer, incl. dialysis.** £837–962m a year to NHS England (Kerr 2019); ~40% recur within 1 year, 65% within 5 (Armstrong 2017); 5-year mortality 30.5% after an ulcer (Armstrong 2020); dialysis HR 7.6 for ulceration vs CKD 3 (Otte 2015). Custom footwear recurrence 25.7% vs 47.8% when worn (Bus 2013; no significant difference overall). Demo output: Case 2, a forefoot offloading insole, re-scanned at each review.
+- Case 3 (Newton test piece) is the simulation step.
 
 > **Design-support prototype. Not a medical device. Not used on patients. Sample scan.** All scans and measurements here are *sample* or *synthetic*. Nothing has been clinically validated or fitted on a person.
 
 ## Why
 
-**Neo has hurt the same ankle four times, in four countries: the Netherlands, France, China and Vietnam.** Every time: the same one-size crutch, a knee pad that hurt, a towel stuffed underneath.
+**Neo has had four foot and ankle injuries, most recently a right-foot cast in 2026.** Every time: a one-size crutch or boot, and the back, hip and other leg paying for it.
 
 It's not just Neo:
 - **67%** of walking-boot patients developed new or worse pain elsewhere by the time they came out of the boot (n=46). *Ready LV 2018, JAAOS Global, [doi:10.5435/jaaosglobal-d-18-00044](https://doi.org/10.5435/jaaosglobal-d-18-00044).*

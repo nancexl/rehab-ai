@@ -95,7 +95,7 @@
 
   // ---------- stepper + one card per step ----------
   const STEPS = ['Scan', 'Design', 'Check', 'File', 'Approve'];
-  const SHORT = { case1: 'Crutch liner', case2: 'Insole', case3: 'Test piece' };
+  const SHORT = { case1: 'A · Ankle fracture: iWALK liner', case2: 'B · Diabetic foot: insole', case3: 'Simulation: Newton test piece' };
   // One key number per card; every value is copied from cases/cases.json for that case.
   const CARD = {
     case1: [

@@ -59,7 +59,7 @@
   }
   const SCENES = {
     Scan() {
-      body.innerHTML = `<div class="dm-scene"><div><p class="src">Step 1 · Sample scan (synthetic leg, OBJ)</p><h2>Nobody fits the part that touches you. We start with one scan.</h2>
+      body.innerHTML = `<div class="dm-scene"><div><p class="src">Step 1 · Sample scan (synthetic leg, OBJ)</p><h2>Scenario A · ankle fracture. Step 1: model the body from one scan.</h2>
         <div class="dm-big"><span data-n="0">0</span> · <span data-n="1">0</span> · <span data-n="2">0</span> <small style="font-size:.4em">mm</small></div>
         <p class="src">Top · middle · bottom of the liner zone, measured by code</p></div><div class="dm-card"><canvas aria-label="Sample leg scan being measured"></canvas></div></div>`;
       legCanvas(body.querySelector('canvas'));
@@ -108,7 +108,7 @@
     Approve() {
       gate = { approved: false, foam: D.outcome.foam_thickness_mm, approvedFoam: null };
       body.innerHTML = `<div class="dm-scene"><div><p class="src">Step 5 · Clinician approval gate (preview; the real gate is in the <a href="./liner.html?view=tech">clinician view</a>)</p>
-        <h2>Unlike a towel, it is checked and signed off.</h2><p class="src">Nothing ships until a clinician approves. The AI prepared a draft. It cannot approve. Any edit revokes approval.</p></div>
+        <h2>Checked by code. Signed off by a clinician.</h2><p class="src">Nothing ships until a clinician approves. The AI prepared a draft. It cannot approve. Any edit revokes approval.</p></div>
         <div class="dm-card dm-gate"><div class="src" style="margin:0">Spec ${esc(D.outcome.spec_sha256.slice(0, 12))}…</div><div class="state" aria-live="assertive">Awaiting clinician approval</div>
         <div class="row">Foam thickness <span class="stepper-in"><button type="button" data-f="-1" aria-label="Thinner">−</button><span class="foam">${gate.foam} mm</span><button type="button" data-f="1" aria-label="Thicker">+</button></span></div>
         <div class="row"><button type="button" class="dm-btn pri appr">Approve as clinician</button></div>
