@@ -47,5 +47,5 @@
 .dm-foot{padding:10px clamp(16px,4vw,40px);font-size:.75rem;color:var(--muted);text-align:center;border-top:1px solid var(--line)}
 .dm-pulse{animation:dmPulse 1s ease 2}
 @keyframes dmPulse{50%{box-shadow:0 0 0 8px rgba(11,138,104,.18)}}
-@media (max-width:760px){.dm-scene{grid-template-columns:1fr;gap:14px}.dm-chap{display:none}.dm-bars .b{grid-template-columns:1fr 70px}.dm-bars .b .l{grid-column:1/-1}}
+@media (max-width:760px){.dm-list li{flex-wrap:wrap;gap:2px 10px}.dm-list li .v{margin-left:0;text-align:left;font-size:.8rem}.dm-top b{display:none}.dm-top{justify-content:flex-end}.dm-scene{grid-template-columns:1fr;gap:14px}.dm-chap{display:none}.dm-bars .b{grid-template-columns:1fr 70px}.dm-bars .b .l{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){.dm,.dm-scene,.dm-list li{animation:none}.dm-pat path{animation:none;stroke-dashoffset:0}.dm-bars .t i{transition:none}}
