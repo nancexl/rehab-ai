@@ -22,6 +22,30 @@
       <p class="scope-note" role="note"><b>Design demonstrator.</b> Not a medical device and not medical advice. Nonhuman fit samples only: not for wearing on a person, not load-bearing.</p>
     </section>
 
+
+    <section class="story" id="story" aria-labelledby="storyH">
+      <div class="story-card">
+        <p class="story-tag">Illustrative composite persona: not a real person or a real quote</p>
+        <h2 id="storyH">Meet “Sam”: weeks off one foot, and both hands taken</h2>
+        <div class="story-grid">
+          <div><h3>Who is injured</h3><p>Sam is an illustrative adult with a broken right ankle in a cast, told to keep weight off that foot for weeks. Sam lives alone, works at a desk and has stairs at home. On standard crutches, both hands are busy: carrying a mug, cooking or opening a door gets hard.</p></div>
+          <div><h3>Where it hurts</h3><p>A hands-free knee crutch frees the hands, but its cuff is one size fits all. The friction is where the leg meets the device: pressure on the shin and knee, straps that dig in, and fiddly donning. Hands, wrists, shoulders and the good leg also take strain from other aids.</p></div>
+          <div><h3>Who operates Rehab AI</h3><p>Sam can describe their day and enter tape measurements. A <b>technician or clinician</b> (for example at an orthotic lab) runs the engineering view, reviews every check and decides whether to approve a <b>nonhuman fit sample</b>. The certified commercial crutch still carries the load.</p></div>
+        </div>
+      </div>
+      <ol class="flow" aria-label="How Rehab AI works, in five steps">
+        <li><span class="flow-n">1</span><b>Intake</b><small>Tape measurements or a phone scan, plus daily tasks and home</small></li>
+        <li><span class="flow-n">2</span><b>Agent plans</b><small>Nemotron calls bounded tools; code computes every number; claim audit</small></li>
+        <li><span class="flow-n">3</span><b>Checks + pattern</b><small>Range checks, a 1:1 pattern tiled on A4, and a build record</small></li>
+        <li class="flow-human"><span class="flow-n">4</span><b>Human approves</b><small>A technician approves this exact version; the agent cannot</small></li>
+        <li><span class="flow-n">5</span><b>Make, fit, measure</b><small>Cut it, fit it on a nonhuman specimen, measure, then recompile v2</small></li>
+      </ol>
+      <div class="chooser" role="tablist" aria-label="Choose your view">
+        <button type="button" role="tab" class="choose" id="choosePatient" data-view="patient" aria-selected="false"><b>I'm on crutches</b><small>Crutch user view. In plain language: understand your options, then share your measurements and comfort issues with a technician.</small></button>
+        <button type="button" role="tab" class="choose" id="chooseTech" data-view="tech" aria-selected="false"><b>I'm a technician</b><small>Technician view. Full engineering view: Nemotron agent trace, checks, 1:1 templates and the approval gate.</small></button>
+      </div>
+    </section>
+
     <section class="evidence" aria-label="What people told us">
       <figure><blockquote>Loss of independence and basic household tasks dominate the experience.</blockquote><figcaption>Living alone with a non-weight-bearing injury · r/LivingAlone</figcaption></figure>
       <figure><blockquote>Crutches and scooters cause secondary pain: hands, wrists, shoulders, the good leg.</blockquote><figcaption>r/brokenbones</figcaption></figure>
@@ -29,6 +53,41 @@
       <figure><blockquote>People switch between crutches, scooter and hands-free devices by task.</blockquote><figcaption>r/ORIF</figcaption></figure>
       <p class="hint">Paraphrased themes from public posts; anecdotal signals, not a representative study.</p>
     </section>
+
+    <section class="patient" id="patientView" hidden aria-labelledby="ptH">
+      <h2 id="ptH">Crutch user view <small class="pt-sub">understand your options and share your measurements and comfort issues with a technician. Nothing is uploaded.</small></h2>
+      <p class="pt-scope">Your answers help a technician size a comfort liner for an existing hands-free crutch. You never build or approve anything here, and this isn't medical advice. Your clinician decides whether a hands-free crutch is right for you.</p>
+      <div class="pt-steps">
+        <fieldset class="pt-step"><legend><span class="flow-n">1</span>Your injury</legend>
+          <label>Which leg is injured? <select id="ptSide"><option value="right">Right</option><option value="left">Left</option></select></label>
+          <label>Has your clinician said you can put weight on it? <select id="ptWb"><option value="non_weight_bearing">No weight at all</option><option value="partial">Some weight</option><option value="full">Yes, full weight</option></select></label>
+          <label>Your age <select id="ptAge"><option>18-49</option><option>50-69</option><option>70+</option></select></label>
+        </fieldset>
+        <fieldset class="pt-step"><legend><span class="flow-n">2</span>Your day</legend>
+          <label class="chk"><input type="checkbox" id="ptAlone"> I live alone</label>
+          <label class="chk"><input type="checkbox" id="ptStairs"> I have stairs at home</label>
+          <label class="chk"><input type="checkbox" id="ptCommute"> I travel outdoors (commute, shops)</label>
+          <label class="chk"><input type="checkbox" id="ptBalance"> I have trouble with balance</label>
+          <label class="chk"><input type="checkbox" id="ptKnee"> The knee on my injured side has a problem</label>
+          <label>At home I wash in <select id="ptShower"><option value="tub">a bath / tub shower</option><option value="walk_in">a walk-in shower</option></select></label>
+          <label>During the day I'm mostly <select id="ptWork"><option value="desk">sitting (desk)</option><option value="standing">on my feet</option><option value="retired">at home / retired</option></select></label>
+        </fieldset>
+        <fieldset class="pt-step"><legend><span class="flow-n">3</span>Where does it hurt or rub now?</legend>
+          <p class="hint">These notes go to your technician. The compiler doesn't turn them into numbers.</p>
+          <div class="pt-pain" id="ptPain"></div>
+          <label>Anything else? <input id="ptNote" type="text" maxlength="200" placeholder="e.g. the strap rubs behind my knee"></label>
+        </fieldset>
+        <fieldset class="pt-step"><legend><span class="flow-n">4</span>Measure your injured leg</legend>
+          <p class="hint">Use a soft tape measure, sitting with your knee bent. Measure around the calf just below the knee, then 7.5 cm lower, then 15 cm lower. Then measure the shin from the knee crease to the ankle bone, and the width across the knee. Ask someone to help if you can.</p>
+          <div class="pt-legform" id="ptLeg"></div>
+          <button class="quiet pt-example" id="ptExample" type="button">Fill in example numbers (not yours)</button>
+        </fieldset>
+      </div>
+      <button class="primary" id="ptCheck" type="button"><span>Check my answers</span><span>→</span></button>
+      <div class="pt-result" id="ptResult" aria-live="polite"></div>
+    </section>
+
+    <div id="techView" hidden>
 
     <ol class="stages" id="stages" aria-label="Compiler stages">
       <li><span>1</span>Intake</li><li><span>2</span>Plan</li><li><span>3</span>Compile</li><li><span>4</span>Build</li><li><span>5</span>Measure</li><li><span>6</span>Learn</li>
@@ -95,6 +154,7 @@
       <ol class="agent-trace" id="agentTrace"></ol>
       <div id="agentOutcome"></div>
     </section>
+    </div>
 
     <p class="footnote">Design demonstrator. The liner is a contact/comfort layer for an existing hands-free crutch; the load path stays the commercial device's. Not a medical device and not medical advice. Clinicians decide weight-bearing and aid choice.</p>
   </main>
@@ -103,5 +163,6 @@
   <script src="./scan-core.js"></script>
   <script src="./liner.js"></script>
   <script src="./liner-agent-ui.js"></script>
+  <script src="./liner-views.js"></script>
 </body>
 </html>

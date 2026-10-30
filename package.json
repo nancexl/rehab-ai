@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node app-server.mjs",
-    "test": "node integration/test-liner-agent.cjs && node --test runtime/test-liner-core.mjs runtime/test-liner-record.mjs runtime/test-scan-core.mjs",
+    "test": "node integration/test-liner-agent.cjs && node --test runtime/test-liner-core.mjs runtime/test-liner-record.mjs runtime/test-scan-core.mjs && node runtime/test-liner-views.mjs",
     "agent:cases": "node tools/run_liner_agent_cases.mjs evidence/live"
   }
 }

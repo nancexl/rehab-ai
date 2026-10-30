@@ -13,7 +13,7 @@
   const BOUNDS = { circumferenceMm: [260, 480], shinLengthMm: [250, 450], kneeWidthMm: [80, 150], linerHeightMm: [100, 200] };
 
   const PERSONAS = {
-    P1: { id: 'P1', title: 'Right foot in a cast · lives alone', note: 'Founder-like case; example measurements until real ones are taken.',
+    P1: { id: 'P1', title: 'Right foot in a cast · lives alone', note: 'Illustrative case; example measurements until real ones are taken.',
       intake: { side: 'right', weight_bearing: 'non_weight_bearing', age_band: '18-49', balance_concern: false, knee_problem: false,
         lives_alone: true, stairs_at_home: true, shower: 'tub', work: 'desk', outdoor_commute: true },
       leg: { circ_top_mm: 345, circ_mid_mm: 362, circ_bottom_mm: 330, shin_length_mm: 380, knee_width_mm: 98, source: 'example_values' } },

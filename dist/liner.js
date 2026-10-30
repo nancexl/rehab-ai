@@ -186,6 +186,8 @@
   // ---------- bridge for the Nemotron agent panel (liner-agent-ui.js) ----------
   window.LinerApp = {
     state: () => S,
+    // Crutch-user-view handoff: inputs arrive unapproved; the technician must press Plan & compile and review before approving.
+    loadFromPatient(intake, leg) { loadPersona({ id: 'PT', title: 'From crutch user view', note: 'Entered by the crutch user; not verified by a technician.', intake: { ...intake }, leg: { ...leg } }); S.userActed = false; run(); $('legSource').textContent = 'entered by crutch user · verify'; },
     fillLeg(leg) { Object.assign(S.leg, leg); $('legForm').querySelectorAll('input').forEach(el => { el.value = S.leg[el.dataset.k]; }); $('legSource').textContent = S.leg.source || 'entered'; resetVersions(); },
     applyAgent(result) {
       // Loads the agent's code-computed spec into the compiler. Approval is NOT carried over: the operator must approve this version.
