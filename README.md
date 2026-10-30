@@ -28,7 +28,7 @@ Context numbers, from the founder's 19 Oct 2026 market research report (not re-v
 4. **A human approves this version.** Only a person can approve, and only for the version they reviewed. Editing or recompiling revokes the approval.
 5. **Make, fit on a nonhuman specimen, measure, recompile v2.** The measured result feeds back into the next version.
 
-Two demo views are being added in parallel: a **patient view** (plain-language intake and result) and a **technician view** (full trace, checks, approval and build record).
+Two entry views ship on `/liner.html`, chosen from the story section or with `?view=crutch|tech`. The **crutch user view** ("I'm on crutches") asks plain-language questions about the injury, the day and where it hurts, takes tape measurements in cm, and checks them against the compiler's ranges without showing engineering numbers. It ends with **"Send to your clinician/technician for review"**, which saves a summary file on the device; nothing is uploaded, and this view cannot build or approve anything. The **technician view** ("I'm a technician") is the full engineering view: Nemotron agent trace, claim audit, checks, 1:1 templates, the human approval gate and the build record. Answers handed over from the crutch user view arrive unapproved, so the technician must compile and review them first.
 
 ## What it does
 
